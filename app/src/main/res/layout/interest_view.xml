@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:id="@+id/line_inter_login"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:scaleType="fitXY"
+            android:src="@drawable/loogined"
+            android:layout_marginTop="50px"
+            android:layout_width="match_parent"
+            android:layout_height="300px" />
+
+        <TextView
+            android:layout_marginBottom="50px"
+            android:textSize="50px"
+            android:text="尚未登录，请登录后查看"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/interest_btnLogin"
+            android:textSize="40px"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#ffffff"
+            android:text="去登陆"
+            android:background="@drawable/btn_login"
+            android:layout_width="600px"
+            android:layout_height="130px" />
+
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/interest_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

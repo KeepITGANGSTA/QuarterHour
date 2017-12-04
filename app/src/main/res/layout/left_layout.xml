@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true">
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:background="@drawable/drawerlayout_background"
+        android:layout_width="match_parent"
+        android:layout_height="400px">
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="230px">
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:gravity="center_vertical"
+                android:id="@+id/left_loginlinear"
+                android:paddingLeft="20px"
+                android:paddingRight="20px"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="155px">
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:src="@drawable/lefticon"
+                    android:id="@+id/iv_drawerlayout_icon"
+                    android:layout_width="140px"
+                    android:layout_height="140px" />
+                <TextView
+                    android:textSize="40px"
+                    android:id="@+id/tv_userName"
+                    android:textColor="#ffffff"
+                    android:text="椰汁奶茶"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40px"
+                    android:layout_marginRight="200px"/>
+
+                <ImageView
+                    android:id="@+id/iv_sex"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/sex"
+                    android:layout_width="93px"
+                    android:layout_height="93px" />
+
+            </com.zhy.autolayout.AutoLinearLayout>
+            <TextView
+                android:id="@+id/tv_idvg"
+                android:textSize="35px"
+                android:textColor="#ffffff"
+                android:padding="20px"
+                android:text="编辑个性签名"
+                android:layout_width="wrap_content"
+                android:layout_height="100px" />
+        </com.zhy.autolayout.AutoLinearLayout>
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+
+    <include layout="@layout/left_list"/>
+
+
+</com.zhy.autolayout.AutoLinearLayout>

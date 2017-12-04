@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="bwie.com.quarterhour.LoginActivity">
+    <ImageView
+        android:src="@drawable/login_bg"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <ImageView
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/login_logo"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginTop="150px"/>
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/login_weixinL"
+            android:gravity="center"
+            android:background="@drawable/login_wenxin_selector"
+            android:layout_width="600px"
+            android:layout_height="100px"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_marginRight="20px"
+                android:background="#00000000"
+                android:src="@drawable/login_wx"
+                android:layout_width="80px"
+                android:layout_height="80px" />
+            <TextView
+                android:textSize="40px"
+                android:textColor="#ffffff"
+                android:text="微信登录"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/login_qqL"
+            android:layout_marginTop="15px"
+            android:gravity="center"
+            android:background="@drawable/login_qq_selector"
+            android:layout_width="600px"
+            android:layout_height="100px"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_marginRight="20px"
+                android:background="#00000000"
+                android:src="@drawable/login_qq"
+                android:layout_width="80px"
+                android:layout_height="80px" />
+            <TextView
+                android:textSize="40px"
+                android:textColor="#ffffff"
+                android:text="QQ登录"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <TextView
+            android:id="@+id/tv_loginOther"
+            android:layout_marginTop="35px"
+            android:layout_marginBottom="60px"
+            android:textColor="#ffffff"
+            android:text="其他登陆方式"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+
+
+</com.zhy.autolayout.AutoRelativeLayout>

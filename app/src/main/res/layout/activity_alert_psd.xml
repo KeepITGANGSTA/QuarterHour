@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="bwie.com.quarterhour.AlertPsdActivity"
+    android:background="@drawable/phonelogin_bg">
+
+    <TextView
+        android:id="@+id/tv_alertGotUser"
+        android:textColor="#A5B3B5"
+        android:textSize="40px"
+        android:layout_margin="40px"
+        android:layout_alignParentRight="true"
+        android:text="已有账号?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:layout_marginBottom="30px"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/login_logo"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginTop="170px"/>
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="700px"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:padding="15px"
+            android:background="@drawable/login_phonebg"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="270px">
+
+
+            <EditText
+                android:textSize="40px"
+                android:textColorHint="#C4C4C4"
+                android:textColor="#C4C4C4"
+                android:hint="输入大小写和数字，密码不能超过8位"
+                android:id="@+id/ed_AlterPsd"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"/>
+
+            <View
+                android:background="#C4C4C4"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+
+            <EditText
+                android:textSize="40px"
+                android:textColorHint="#C4C4C4"
+                android:hint="请在此输入密码"
+                android:id="@+id/ed_AlterPsdAgain"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"/>
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <Button
+            android:id="@+id/btn_Alterfinish"
+            android:layout_marginTop="50px"
+            android:background="@drawable/btn_login"
+            android:textSize="40px"
+            android:textColor="#FFFFFF"
+            android:text="完成"
+            android:layout_width="match_parent"
+            android:layout_height="100px" />
+
+
+        <TextView
+            android:id="@+id/tv_alterloginNoLogin"
+            android:layout_marginTop="70px"
+            android:textSize="40px"
+            android:textColor="#C4C4C4"
+            android:text="游客登录"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+
+</com.zhy.autolayout.AutoRelativeLayout>

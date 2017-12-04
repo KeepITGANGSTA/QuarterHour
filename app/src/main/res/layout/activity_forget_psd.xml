@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout
+    android:background="@drawable/phonelogin_bg"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="bwie.com.quarterhour.ForgetPsdActivity">
+
+    <TextView
+        android:id="@+id/tv_gotUser"
+        android:textColor="#A5B3B5"
+        android:textSize="40px"
+        android:layout_margin="40px"
+        android:layout_alignParentRight="true"
+        android:text="已有账号?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:layout_marginBottom="30px"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/login_logo"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginTop="170px"/>
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="700px"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:background="@drawable/login_phonebg"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="270px">
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:padding="15px"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="40px"
+                    android:text="86+"
+                    android:textColor="#C4C4C4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_margin="20px"
+                    android:background="#C4C4C4"
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"/>
+                <EditText
+                    android:textSize="40px"
+                    android:textColorHint="#C4C4C4"
+                    android:textColor="#C4C4C4"
+                    android:hint="请输入手机号"
+                    android:id="@+id/ed_Forgetphone"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:inputType="phone"/>
+
+                <Button
+                    android:background="@null"
+                    android:id="@+id/btn_getCode"
+                    android:textColor="#C4C4C4"
+                    android:textSize="30px"
+                    android:text="获取验证码"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50px" />
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+
+            <View
+                android:background="#C4C4C4"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+            <com.zhy.autolayout.AutoLinearLayout
+                android:padding="15px"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:textSize="40px"
+                    android:textColorHint="#C4C4C4"
+                    android:hint="请输入验证码"
+                    android:id="@+id/ed_forgetCode"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:password="true"/>
+            </com.zhy.autolayout.AutoLinearLayout>
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <Button
+            android:id="@+id/btn_forgetNext"
+            android:layout_marginTop="50px"
+            android:background="@drawable/btn_login"
+            android:textSize="40px"
+            android:textColor="#FFFFFF"
+            android:text="下一步"
+            android:layout_width="match_parent"
+            android:layout_height="100px" />
+
+
+        <TextView
+            android:id="@+id/tv_forgetloginNoLogin"
+            android:layout_marginTop="70px"
+            android:textSize="40px"
+            android:textColor="#C4C4C4"
+            android:text="游客登录"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+
+
+
+</com.zhy.autolayout.AutoRelativeLayout>

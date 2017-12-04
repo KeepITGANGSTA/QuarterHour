@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:gravity="center_vertical"
+        android:padding="10px"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="170px">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:scaleType="fitXY"
+            android:src="@drawable/phonelogin_bg"
+            app:riv_oval="true"
+            android:id="@+id/ivEpi_Iconone"
+            android:layout_width="120px"
+            android:layout_height="120px" />
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:gravity="center_vertical"
+            android:paddingLeft="15px"
+            android:layout_width="match_parent"
+            android:layout_height="88px">
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:orientation="vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/tvEpi_auth_one"
+                    android:textColor="#E51C23"
+                    android:textSize="40px"
+                    android:text="作者"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tvEpipublishTime_one"
+                    android:textSize="25px"
+                    android:layout_weight="1"
+                    android:textColor="#555555"
+                    android:text="发布时间"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <ImageView
+                android:id="@+id/ivEpi_open_one"
+                android:src="@drawable/icon_open"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="90px"
+                android:layout_height="90px" />
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+    </com.zhy.autolayout.AutoLinearLayout>
+    <TextView
+        android:id="@+id/tvEpi_content_one"
+        android:textSize="40px"
+        android:padding="20px"
+        android:text="段子"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/ivEpimoreView_one"
+        android:layout_width="match_parent"
+        android:layout_height="400px" />
+
+
+
+</com.zhy.autolayout.AutoLinearLayout>

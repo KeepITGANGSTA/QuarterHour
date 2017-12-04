@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout
+    android:background="@drawable/left_list_linear"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="30px"
+    android:gravity="center_vertical"
+    >
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_gravity="center_vertical"
+        android:id="@+id/drawerlayout_notice"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="90px"
+        >
+
+        <ImageView
+            android:id="@+id/iv_left_item"
+            android:src="@drawable/my_notice"
+            android:layout_width="70px"
+            android:layout_height="70px" />
+        <TextView
+            android:id="@+id/tv_left_item"
+            android:layout_marginRight="350px"
+            android:layout_marginLeft="40px"
+            android:textSize="45px"
+            android:text="我的关注"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:src="@drawable/raw_1499943790"
+            android:layout_width="match_parent"
+            android:layout_height="70px" />
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+
+</com.zhy.autolayout.AutoLinearLayout>

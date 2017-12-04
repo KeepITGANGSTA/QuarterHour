@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="bwie.com.quarterhour.HomeActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+
+        <toolbar.SimpleToolBar
+            android:id="@+id/mToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#03A9F4"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp">
+            <include layout="@layout/toolbar_view"/>
+        </toolbar.SimpleToolBar>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/main_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+    </FrameLayout>
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/mBottomBar"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        app:bb_behavior="shy"
+        app:bb_tabXmlResource="@xml/bottombar_menu"
+        />
+
+
+</android.support.design.widget.CoordinatorLayout>

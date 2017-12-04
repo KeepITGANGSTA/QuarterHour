@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs xmlns:android="http://schemas.android.com/apk/res/android">
+    <tab
+        id="@+id/tab_recommend"
+        title="推荐"
+        icon="@drawable/bottombar_tab_recommend"
+        inActiveColor="#8F8F8F"
+        activeColor="#03A9F4"
+        />
+    <tab
+        id="@+id/tab_talk"
+        title="段子"
+        icon="@drawable/bottombar_tab_talk"
+        inActiveColor="#8F8F8F"
+        activeColor="#03A9F4"
+        />
+    <tab
+        id="@+id/tab_video"
+        title="视频"
+        icon="@drawable/bottombar_tab_video"
+        inActiveColor="#8F8F8F"
+        activeColor="#03A9F4"
+        />
+</tabs>

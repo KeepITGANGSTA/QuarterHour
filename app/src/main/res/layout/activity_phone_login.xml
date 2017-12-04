@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout
+    android:background="@drawable/phonelogin_bg"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="bwie.com.quarterhour.PhoneLoginActivity">
+
+    <TextView
+        android:id="@+id/tv_resUser"
+        android:textColor="#A5B3B5"
+        android:textSize="40px"
+        android:layout_margin="40px"
+        android:layout_alignParentRight="true"
+        android:text="注册账号"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:layout_marginBottom="30px"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/login_logo"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginTop="170px"/>
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="600px"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:background="@drawable/login_phonebg"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="270px">
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginLeft="20px"
+                    android:layout_marginRight="20px"
+                    android:textSize="40px"
+                    android:textColor="#C4C4C4"
+                    android:layout_gravity="center_vertical"
+                    android:text="账号"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:inputType="phone"
+                    android:id="@+id/ed_loginPhone"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"/>
+            </com.zhy.autolayout.AutoLinearLayout>
+            <View
+                android:background="#C4C4C4"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+            <com.zhy.autolayout.AutoLinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginLeft="20px"
+                    android:layout_marginRight="20px"
+                    android:textSize="40px"
+                    android:textColor="#C4C4C4"
+                    android:layout_gravity="center_vertical"
+                    android:text="密码"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:password="true"
+                    android:id="@+id/ed_loginPsd"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"/>
+            </com.zhy.autolayout.AutoLinearLayout>
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <Button
+            android:id="@+id/btn_Login"
+            android:layout_marginTop="60px"
+            android:background="@drawable/btn_login"
+            android:textSize="40px"
+            android:textColor="#FFFFFF"
+            android:text="登录"
+            android:layout_width="match_parent"
+            android:layout_height="100px" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="40px"
+                android:id="@+id/tv_forgotPsd"
+                android:layout_marginTop="20px"
+                android:textColor="#C4C4C4"
+                android:layout_alignParentRight="true"
+                android:text="忘记密码"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_loginNoLogin"
+            android:layout_marginTop="53px"
+            android:textSize="40px"
+            android:textColor="#C4C4C4"
+            android:text="游客登录"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+
+</com.zhy.autolayout.AutoRelativeLayout>
