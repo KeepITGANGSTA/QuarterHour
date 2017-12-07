@@ -71,16 +71,21 @@ public class LoginModel implements ILoginModel {
     }
 
     public void lmdestroy(){
-        progressSubscriber.dismissProgressDialog();
-        if (progressSubscriber.isUnsubscribed()){
-            progressSubscriber.unsubscribe();
+        if (progressSubscriber!=null){
+            progressSubscriber.dismissProgressDialog();
+            if (progressSubscriber.isUnsubscribed()){
+                progressSubscriber.unsubscribe();
+            }
+            progressSubscriber=null;
         }
-        progressSubscriber=null;
-        psb.dismissProgressDialog();
-        if (psb.isUnsubscribed()){
-            psb.unsubscribe();
+        if (psb!=null){
+            psb.dismissProgressDialog();
+            if (psb.isUnsubscribed()){
+                psb.unsubscribe();
+            }
+            psb=null;
         }
-        psb=null;
+
     }
 
 }

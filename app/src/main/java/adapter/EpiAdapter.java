@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
@@ -36,6 +38,15 @@ public class EpiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private GridLayoutManager gridLayoutManager;
     private EpiItemAdapter adapter;
     private View view0;
+
+    public void refresh(List<EpiBean> lis){
+        if (list!=null){
+            list.clear();
+        }
+        this.list=lis;
+        notifyDataSetChanged();
+        System.out.println("-----------------适配器刷新----------------");
+    }
 
     public EpiAdapter(Context context, List<EpiBean> list) {
         this.context = context;
@@ -88,29 +99,32 @@ public class EpiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        RequestOptions options=new RequestOptions();
+        options.skipMemoryCache(true);
+        options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
         EpiBean epiBean=list.get(position);
         if (holder instanceof EpiViewHolder){
-            Glide.with(context).load(epiBean.user.icon).into(((EpiViewHolder) holder).iv_icon);
+            Glide.with(context).applyDefaultRequestOptions(options).load(epiBean.user.icon).into(((EpiViewHolder) holder).iv_icon);
             ((EpiViewHolder) holder).tv_authorName.setText(epiBean.user.nickname);
             ((EpiViewHolder) holder).tv_publishTime.setText(epiBean.createTime);
             ((EpiViewHolder) holder).tv_content.setText(epiBean.content);
         }else if (holder instanceof EpiItemViewHolderOne){
-            Glide.with(context).load(epiBean.user.icon).into(((EpiItemViewHolderOne) holder).iv_icon);
+            Glide.with(context).applyDefaultRequestOptions(options).load(epiBean.user.icon).into(((EpiItemViewHolderOne) holder).iv_icon);
             ((EpiItemViewHolderOne) holder).tv_authorName.setText(epiBean.user.nickname);
             ((EpiItemViewHolderOne) holder).tv_publishTime.setText(epiBean.createTime);
             ((EpiItemViewHolderOne) holder).tv_content.setText(epiBean.content);
-            Glide.with(context).load(epiBean.imgUrls).into(((EpiItemViewHolderOne) holder).iv);
+            Glide.with(App.AppContext).applyDefaultRequestOptions(options).load(epiBean.imgUrls).into(((EpiItemViewHolderOne) holder).iv);
         }else if (holder instanceof EpiItemViewHolderTwo){
-            Glide.with(context).load(epiBean.user.icon).into(((EpiItemViewHolderTwo) holder).iv_icon);
+            Glide.with(context).applyDefaultRequestOptions(options).load(epiBean.user.icon).into(((EpiItemViewHolderTwo) holder).iv_icon);
             ((EpiItemViewHolderTwo) holder).tv_authorName.setText(epiBean.user.nickname);
             ((EpiItemViewHolderTwo) holder).tv_publishTime.setText(epiBean.createTime);
             ((EpiItemViewHolderTwo) holder).tv_content.setText(epiBean.content);
             String imgUrls = (String) epiBean.imgUrls;
             String[] split = imgUrls.split("\\|");
-            Glide.with(context).load(split[0]).into(((EpiItemViewHolderTwo) holder).iv_one);
-            Glide.with(context).load(split[1]).into(((EpiItemViewHolderTwo) holder).iv_two);
+            Glide.with(context).applyDefaultRequestOptions(options).load(split[0]).into(((EpiItemViewHolderTwo) holder).iv_one);
+            Glide.with(context).applyDefaultRequestOptions(options).load(split[1]).into(((EpiItemViewHolderTwo) holder).iv_two);
         }else if (holder instanceof EpiViewHolderMore){
-            Glide.with(context).load(epiBean.user.icon).into(((EpiViewHolderMore) holder).iv_icon);
+            Glide.with(context).applyDefaultRequestOptions(options).load(epiBean.user.icon).into(((EpiViewHolderMore) holder).iv_icon);
             ((EpiViewHolderMore) holder).tv_authorName.setText(epiBean.user.nickname);
             ((EpiViewHolderMore) holder).tv_publishTime.setText(epiBean.createTime);
             ((EpiViewHolderMore) holder).tv_content.setText(epiBean.content);
@@ -121,23 +135,6 @@ public class EpiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             adapter = new EpiItemAdapter(context,split);
             ((EpiViewHolderMore) holder).recyclerView.setAdapter(adapter);
         }
-//        String icon = epiBean.user.icon;
-//        System.out.println("用户头像---"+icon);
-//        Glide.with(App.AppContext).load(icon).into(holder.iv_icon);
-//        holder.tv_authorName.setText(epiBean.user.nickname);
-//        holder.tv_publishTime.setText(epiBean.createTime);
-//        holder.tv_content.setText(epiBean.content);
-//        String imgUrls = (String) epiBean.imgUrls;
-//        if (imgUrls!=null){
-//            String[] split = imgUrls.split("\\|");
-//            if (split!=null){
-//                System.out.println("split-----------------------");
-//                adapter = new EpiItemAdapter(context,split);
-//                linearLayoutManager=new LinearLayoutManager(context);
-//                holder.recyclerView.setLayoutManager(linearLayoutManager);
-//                holder.recyclerView.setAdapter(adapter);
-//            }
-//        }
     }
 
     @Override
@@ -223,6 +220,7 @@ public class EpiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         holder=null;
         view0=null;
     }
+
 
 
 

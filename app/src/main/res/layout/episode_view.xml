@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.liaoinstan.springview.widget.SpringView
+        android:visibility="visible"
         android:id="@+id/sv_epi"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -13,6 +15,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </com.liaoinstan.springview.widget.SpringView>
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btn_epiAgain"
+        android:textSize="40px"
+        android:textColor="#ffffff"
+        android:text="重试"
+        android:layout_marginTop="500px"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_login"
+        android:layout_width="300px"
+        android:layout_height="100px" />
 
 
 </LinearLayout>

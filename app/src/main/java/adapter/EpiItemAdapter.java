@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import bwie.com.quarterhour.App;
 import bwie.com.quarterhour.R;
@@ -42,7 +44,10 @@ public class EpiItemAdapter extends RecyclerView.Adapter<EpiItemAdapter.EpiItemV
 
     @Override
     public void onBindViewHolder(EpiItemViewHolder holder, int position) {
-        Glide.with(context).load(iv[position]).into(holder.imageView);
+        RequestOptions options=new RequestOptions();
+        options.skipMemoryCache(true);
+        options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+        Glide.with(context).applyDefaultRequestOptions(options).load(iv[position]).into(holder.imageView);
     }
 
     @Override
@@ -65,6 +70,8 @@ public class EpiItemAdapter extends RecyclerView.Adapter<EpiItemAdapter.EpiItemV
         context=null;
         iv=null;
         inflater=null;
+        holder=null;
+        view=null;
     }
 
 

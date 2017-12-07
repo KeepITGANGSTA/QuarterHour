@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="bwie.com.quarterhour.PublishVideoActivity">
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:paddingLeft="15px"
+        android:paddingRight="15px"
+        android:background="#03A9F4"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/tv_creation_back"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:textColor="#ffffff"
+            android:text="取消"
+            android:textSize="40px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="40px"
+            android:textColor="#ffffff"
+            android:layout_centerInParent="true"
+            android:text="创作"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_creation_publish"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#ffffff"
+            android:text="发表"
+            android:textSize="40px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <EditText
+        android:textSize="40px"
+        android:hint="请输入内容，禁止输入色情，暴力等违反国家法律的内容，违者将以封号处理！"
+        android:id="@+id/ed_creation_content"
+        android:layout_margin="10px"
+        android:background="@null"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="200px"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="10px"
+        android:layout_marginRight="10px"
+        android:layout_marginTop="200px"
+        android:id="@+id/recy_pubImg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

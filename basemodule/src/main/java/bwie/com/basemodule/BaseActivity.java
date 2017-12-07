@@ -96,11 +96,14 @@ public abstract class BaseActivity<P extends BasePresent> extends AppCompatActiv
             requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
         setContentView(getLayoutID());
+        steepStateBar(isSteepStateBar());
 
         basePresent=initBasePresent();
         initView(savedInstanceState);
         initData();
     }
+
+    protected abstract boolean isSteepStateBar();
 
     protected abstract P initBasePresent();
 

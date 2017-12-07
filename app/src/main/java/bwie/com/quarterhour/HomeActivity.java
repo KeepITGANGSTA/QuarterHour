@@ -1,6 +1,8 @@
 package bwie.com.quarterhour;
 
 import android.app.ActivityOptions;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -8,19 +10,25 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.orhanobut.hawk.Hawk;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.zhy.autolayout.AutoLinearLayout;
@@ -38,6 +46,7 @@ import butterknife.Unbinder;
 import bwie.com.basemodule.BaseActivity;
 import bwie.com.basemodule.BasePresent;
 import bwie.com.basemodule.SharedPreferencesUtil;
+import entity.UserInfo;
 import fragment.EpisodeFragment;
 import fragment.HomeFragment;
 import fragment.VideoFragment;
@@ -96,6 +105,27 @@ public class HomeActivity extends BaseActivity {
     private TimerTask timerTask;
     private FragmentTransaction fragmentTransaction;
 
+    private View inflate;
+    private Button choosePhoto;
+    private Button takePhoto;
+    private Button btn_can;
+    private Dialog dialog;
+    private AlertDialog.Builder adb;
+    private AlertDialog show;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UserInfo userInfo = Hawk.get("UserInfo");
+        if (userInfo!=null){
+            Glide.with(App.AppContext).load(userInfo.icon).into(iv_drawerlayout_icon);
+            if (userInfo.nickname==null){
+                tv_userName.setText(userInfo.username);
+            }else {
+                tv_userName.setText(userInfo.nickname);
+            }
+        }
+    }
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -154,13 +184,31 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void initData() {
         simpleToolBar.setIv_leftOnClick(v -> drawerLayout.openDrawer(Gravity.LEFT));
-
-        simpleToolBar.setIv_rightOnClick(v -> Toast.makeText(HomeActivity.this, "发布", Toast.LENGTH_SHORT).show());
-
+        simpleToolBar.setIv_rightOnClick(v -> publishEpi());
         left_recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new LeftItemAdapter(this,title,ivlist);
         left_recyclerView.setAdapter(adapter);
         adapter.setOnItemClick(id -> Toast.makeText(HomeActivity.this, title.get(id), Toast.LENGTH_SHORT).show());
+    }
+
+    private void publishEpi() {
+        String uid = SharedPreferencesUtil.getPreferencesValue("uid");
+        if (TextUtils.isEmpty(uid)){
+            adb = new AlertDialog.Builder(HomeActivity.this);
+            adb.setMessage("尚未登陆，还不能发表段子~");
+
+            adb.setPositiveButton("去登陆", (dialog, which) -> {
+                Intent intent=new Intent(HomeActivity.this,PhoneLoginActivity.class);
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this).toBundle());
+                show.dismiss();
+            });
+            adb.setNegativeButton("做一名游侠~", (dialog, which) -> show.dismiss());
+            adb.create();
+            show = adb.show();
+        }else {
+            Intent intent=new Intent(HomeActivity.this,PublishEpiActivity.class);
+            startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this).toBundle());
+        }
 
     }
 
@@ -183,6 +231,8 @@ public class HomeActivity extends BaseActivity {
                         }
                     };
                     timer.schedule(timerTask,1000);
+                }else {
+                    showUserDialog();
                 }
                 break;
             case R.id.tv_idvg:
@@ -194,7 +244,43 @@ public class HomeActivity extends BaseActivity {
             case R.id.left_setting:
                 Toast.makeText(HomeActivity.this, "设置", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.takePhoto:
+                Toast.makeText(this, "修改昵称", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                break;
+            case R.id.choosePhoto:
+                Toast.makeText(this, "修改个性签名", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                break;
+            case R.id.btn_qu:
+                Toast.makeText(this, "退出登录", Toast.LENGTH_SHORT).show();
+                SharedPreferencesUtil.clearPreferences("uid");
+                SharedPreferencesUtil.clearPreferences("token");
+                Hawk.delete("UserInfo");
+                iv_drawerlayout_icon.setImageResource(R.drawable.lefticon);
+                tv_userName.setText("尚未登陆");
+                dialog.dismiss();
+                break;
         }
+    }
+
+    private void showUserDialog() {
+        dialog = new Dialog(this,R.style.DialogSelect);
+        inflate = LayoutInflater.from(this).inflate(R.layout.cancle, null);
+        choosePhoto = (Button) inflate.findViewById(R.id.choosePhoto);
+        takePhoto = (Button) inflate.findViewById(R.id.takePhoto);
+        btn_can = (Button) inflate.findViewById(R.id.btn_qu);
+        choosePhoto.setOnClickListener(this);
+        takePhoto.setOnClickListener(this);
+        btn_can.setOnClickListener(this);
+        dialog.setContentView(inflate);
+        Window dialogWindow = dialog.getWindow();
+        dialogWindow.setGravity( Gravity.BOTTOM);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.y = 10;
+        lp.width=App.screen_width-20;
+        dialogWindow.setAttributes(lp);
+        dialog.show();
     }
 
     @Override
@@ -295,6 +381,26 @@ public class HomeActivity extends BaseActivity {
         videoFragment=null;
         ivlist.clear();
         title.clear();
+        if (dialog!=null){
+            if (dialog.isShowing()){
+                dialog.dismiss();
+            }
+            dialog.cancel();
+            dialog=null;
+            inflate=null;
+        }
+        if (adb!=null){
+            adb=null;
+            if (show.isShowing()){
+                show.dismiss();
+            }
+            show=null;
+        }
+    }
+
+    @Override
+    protected boolean isSteepStateBar() {
+        return false;
     }
 
     private long exitTime=0;

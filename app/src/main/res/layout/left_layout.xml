@@ -27,6 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="155px">
                 <com.makeramen.roundedimageview.RoundedImageView
+                    app:riv_oval="true"
                     android:src="@drawable/lefticon"
                     android:id="@+id/iv_drawerlayout_icon"
                     android:layout_width="140px"
@@ -35,7 +36,7 @@
                     android:textSize="40px"
                     android:id="@+id/tv_userName"
                     android:textColor="#ffffff"
-                    android:text="椰汁奶茶"
+                    android:text="尚未登陆"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="40px"
@@ -44,7 +45,7 @@
                 <ImageView
                     android:id="@+id/iv_sex"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/sex"
+                    android:src="@drawable/man_login"
                     android:layout_width="93px"
                     android:layout_height="93px" />
 

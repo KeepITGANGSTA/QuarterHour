@@ -87,9 +87,6 @@ public class HeadBase extends BaseHeader {
             add(sheng);
         }};
     }
-
-
-
     @Override
     public void onDropAnim(View rootView, int dy) {
         System.out.println("---------下拉==="+dy);
@@ -121,35 +118,37 @@ public class HeadBase extends BaseHeader {
 
     @Override
     public void onStartAnim() {
-        System.out.println("---list---"+list.size());
         System.out.println("-------------开始");
         rotation = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 360f);
         rotation.setDuration(1000);
         rotation.setRepeatCount(Animation.INFINITE);
         rotation.start();
-        timer = new Timer();
-        tt = new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("i-----d"+id);
-                if (id<8){
-                    System.out.println("id----------"+id);
-                    ((Activity)context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ObjectAnimator objectAnimator = list.get(id);
-                            objectAnimator.setDuration(300);
-                            objectAnimator.start();
-                            id++;
-                        }
-                    });
+        if (list!=null){
+            timer = new Timer();
+            tt = new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("i-----d"+id);
+                    if (id<8){
+                        System.out.println("id----------"+id);
+                        ((Activity)context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ObjectAnimator objectAnimator = list.get(id);
+                                objectAnimator.setDuration(300);
+                                objectAnimator.start();
+                                id++;
+                            }
+                        });
+                    }
+                    if (id==8){
+                        id=0;
+                    }
                 }
-                if (id==8){
-                    id=0;
-                }
-            }
-        };
-        timer.schedule(tt,0,300);
+            };
+            timer.schedule(tt,0,300);
+        }
+
 
 
     }
@@ -170,8 +169,12 @@ public class HeadBase extends BaseHeader {
         }
         list.clear();
         list=null;
-        context=null;
         view=null;
         linearLayout=null;
     }
+
+    public void setContext(){
+        context=null;
+    }
+
 }

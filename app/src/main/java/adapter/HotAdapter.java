@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.dou361.ijkplayer.listener.OnShowThumbnailListener;
 import com.dou361.ijkplayer.widget.PlayStateParams;
 import com.dou361.ijkplayer.widget.PlayerView;
@@ -27,6 +29,7 @@ import java.util.List;
 
 import bwie.com.quarterhour.App;
 import bwie.com.quarterhour.R;
+import entity.VideoInfo;
 
 /**
  * Created by 李英杰 on 2017/12/1.
@@ -35,37 +38,52 @@ import bwie.com.quarterhour.R;
 
 public class HotAdapter extends RecyclerView.Adapter<HotAdapter.HotViewHolder> {
 
-    private List<Object> list;
+    private List<VideoInfo> list;
     private Context context;
     private PlayerView playerView;
     private View viewp;
     private SpannableStringBuilder style;
     private HotViewHolder hotViewHolder;
 
-    public HotAdapter(List<Object> list, Context context) {
+    public HotAdapter(List<VideoInfo> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
+    public void setList(List<VideoInfo> t){
+        if (list!=null){
+            list.clear();
+        }
+        list=t;
+        notifyDataSetChanged();
+    }
+
     @Override
     public HotViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        System.out.println("onCreateViewHolder---------------");
         viewp = LayoutInflater.from(context).inflate(R.layout.hot_item,null);
         LinearLayout.LayoutParams layoutParams =new  LinearLayout.LayoutParams(App.screen_width, LinearLayout.LayoutParams.WRAP_CONTENT);
         viewp.setLayoutParams(layoutParams);
         hotViewHolder = new HotViewHolder(viewp);
         return hotViewHolder;
     }
-
     @Override
     public void onBindViewHolder(HotViewHolder holder, int position) {
-        holder.iv_icon.setImageResource(R.mipmap.nhdz);
-        holder.tv_time.setText("2017.12.1");
-        holder.tv_content.setText("天气美美的，感觉草草哒");
-        holder.view.setVisibility(View.VISIBLE);
+        RequestOptions options=new RequestOptions();
+        options.skipMemoryCache(true);
+        options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+        System.out.println("onBindViewHolder---------------"+holder.tv_auth);
+        VideoInfo videoInfo = list.get(position);
+        Glide.with(context).applyDefaultRequestOptions(options).load(videoInfo.user.icon).into(holder.iv_icon);
+        holder.tv_time.setText(videoInfo.createTime);
+        holder.tv_content.setText(videoInfo.workDesc);
+        holder.tv_auth.setText(videoInfo.user.nickname);
+        //holder.view.setVisibility(View.VISIBLE);
         style = new SpannableStringBuilder("用户一:还行吧");
         style.setSpan(new ForegroundColorSpan(Color.parseColor("#03A9F4")),0,4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         holder.tv_comment.setText(style);
         holder.tv_conmment2.setText(style);
+
 //        holder.iv_publish.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -77,7 +95,8 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.HotViewHolder> {
 //                }
 //            }
 //        });
-//        playerView=new PlayerView((Activity) viewp.getContext())
+//        String url=videoInfo.videoUrl.replace("https://www.zhaoapi.cn","http://120.27.23.105");
+//        playerView=new PlayerView((Activity) context,holder.itemView)
 //                .setTitle("什么")
 //                .setScaleType(PlayStateParams.fitparent)
 //                .hideMenu(true)
@@ -85,26 +104,25 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.HotViewHolder> {
 //                .showThumbnail(new OnShowThumbnailListener() {
 //                    @Override
 //                    public void onShowThumbnail(ImageView ivThumbnail) {
-//                        Glide.with(context)
-//                                .load("http://pic2.nipic.com/20090413/406638_125424003_2.jpg")
-//                                .placeholder(R.mipmap.ic_launcher)
-//                                .error(R.mipmap.ic_launcher_round)
+//                        Glide.with(App.AppContext).applyDefaultRequestOptions(options)
+//                                .load(videoInfo.cover)
 //                                .into(ivThumbnail);
 //                    }
-//                }).setPlaySource("http://9890.vod.myqcloud.com/9890_9c1fa3e2aea011e59fc841df10c92278.f20.mp4")
+//                }).setPlaySource(url)
 //                .startPlay();
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "1", Toast.LENGTH_SHORT).show();
-                if ( holder.item_menu.getVisibility()==View.GONE){
-                    holder.item_menu.setVisibility(View.VISIBLE);
-                }else {
-                    holder.item_menu.setVisibility(View.GONE);
-                }
-                System.out.println("ikjPlayer---"+playerView);
-            }
-        });
+
+//        holder.view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(context, "1", Toast.LENGTH_SHORT).show();
+//                if ( holder.item_menu.getVisibility()==View.GONE){
+//                    holder.item_menu.setVisibility(View.VISIBLE);
+//                }else {
+//                    holder.item_menu.setVisibility(View.GONE);
+//                }
+//                System.out.println("ikjPlayer---"+playerView);
+//            }
+//        });
     }
 
     @Override
@@ -123,6 +141,7 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.HotViewHolder> {
         private ImageView iv_publish;
         private ImageView iv_open;
         private LinearLayout item_menu;
+        private LinearLayout lin_player;
         public HotViewHolder(View itemView) {
             super(itemView);
             iv_icon=itemView.findViewById(R.id.iv_hot_icon);
@@ -133,8 +152,9 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.HotViewHolder> {
             tv_conmment2=itemView.findViewById(R.id.tv_commentAuth_t);
             iv_publish=itemView.findViewById(R.id.iv_publish);
             iv_open=itemView.findViewById(R.id.iv_open);
-            view=itemView.findViewById(R.id.include_play);
+          //  view=itemView.findViewById(R.id.include_play);
             item_menu=itemView.findViewById(R.id.item_menu);
+           // lin_player=itemView.findViewById(R.id.lin_player);
         }
     }
 
@@ -146,6 +166,10 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.HotViewHolder> {
         this.context=null;
         if (hotViewHolder!=null){
             hotViewHolder=null;
+        }
+        if (playerView!=null){
+            playerView.onDestroy();
+            playerView=null;
         }
 
     }

@@ -143,6 +143,11 @@ public class PhoneLoginActivity extends BaseActivity<LoginPresent> implements Lo
     }
 
     @Override
+    protected boolean isSteepStateBar() {
+        return false;
+    }
+
+    @Override
     public void initIntentAnim() {
 
     }

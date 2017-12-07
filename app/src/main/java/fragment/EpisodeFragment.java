@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.liaoinstan.springview.container.DefaultFooter;
@@ -20,8 +22,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import adapter.EpiAdapter;
+import adapter.EpiDivide;
 import adapter.HeadBase;
 import adapter.RecyclerAdapter;
+import adapter.RecyclerViewDivide;
 import api.Api;
 import api.Common;
 import bwie.com.basemodule.RetrofitHelper;
@@ -53,13 +57,14 @@ public class EpisodeFragment extends Fragment {
     private ProgressSubscriber progressSubscriber;
     private EpiAdapter adaptr;
     private SpringView sv;
-    private Timer timer;
-    private TimerTask tt;
     private int startPage=1;
     private List<EpiBean> epiBeanList;
     private Subscription subscribe;
     private HeadBase headBase;
     private DefaultFooter footer;
+    private Button btn_again;
+    private EpiDivide divide;
+    private Subscription epiRefresh;
 
 
     @Nullable
@@ -79,6 +84,7 @@ public class EpisodeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         sv=mRoot.findViewById(R.id.sv_epi);
+        btn_again = mRoot.findViewById(R.id.btn_epiAgain);
         headBase=new HeadBase(getContext());
         footer = new DefaultFooter(getContext());
         sv.setHeader(headBase);
@@ -86,14 +92,33 @@ public class EpisodeFragment extends Fragment {
         sv.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                timer = new Timer();
-                tt = new TimerTask() {
-                    @Override
-                    public void run() {
-                        getActivity().runOnUiThread(() -> sv.onFinishFreshAndLoad());
-                    }
-                };
-                timer.schedule(tt,1500);
+                Api apiService = RetrofitHelper.getRetrofitHelper(Common.BASE_URL, App.AppContext).getApiService(Api.class);
+                epiRefresh = apiService.getEpi("1")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<BaseEntity<List<EpiBean>>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                System.out.println("刷新失败---" + e.toString());
+                            }
+
+                            @Override
+                            public void onNext(BaseEntity<List<EpiBean>> listBaseEntity) {
+                                System.out.println("刷新成功---" + listBaseEntity.data.size());
+                                if (epiBeanList != null) {
+                                    epiBeanList.clear();
+                                }
+                                epiBeanList = listBaseEntity.data;
+                                adaptr.refresh(epiBeanList);
+                                sv.onFinishFreshAndLoad();
+                            }
+                        });
+
             }
 
             @Override
@@ -124,31 +149,42 @@ public class EpisodeFragment extends Fragment {
             }
         });
         episode_recyclerView=mRoot.findViewById(R.id.episode_recyclerView);
+        initEpi();
+
+//        episode_recyclerView.setLayoutManager(linearLayoutManager);
+//        adapter = new RecyclerAdapter(getActivity());
+//        episode_recyclerView.setAdapter(adapter);
+        btn_again.setOnClickListener(v -> initEpi());
+    }
+    private void initEpi() {
         Api apiService = RetrofitHelper.getRetrofitHelper(Common.BASE_URL, App.AppContext).getApiService(Api.class);
         Observable epi = apiService.getEpi(startPage+"");
         System.out.println("----------------epi"+epi);
         progressSubscriber = new ProgressSubscriber<List<EpiBean>>(getActivity()) {
             @Override
             public void _Next(List<EpiBean> epiBean) {
+                btn_again.setVisibility(View.GONE);
+                sv.setVisibility(View.VISIBLE);
                 EpisodeFragment.this.epiBeanList=epiBean;
                 System.out.println("段子成功---"+epiBean);
                 adaptr = new EpiAdapter(getActivity(),epiBeanList);
                 episode_recyclerView.setLayoutManager(linearLayoutManager);
+                divide = new EpiDivide(getContext(),EpiDivide.VETTICAL_LIST,0,17);
+                episode_recyclerView.addItemDecoration(divide);
                 episode_recyclerView.setAdapter(adaptr);
             }
 
             @Override
             public void _OnError(String msg) {
                 System.out.println("段子失败---"+msg);
+                if ("请求失败".equals(msg)){
+                    sv.setVisibility(View.GONE);
+                    btn_again.setVisibility(View.VISIBLE);
+                }
             }
         };
-        HttpUtils.getInstace().toSubscribe(epi, progressSubscriber,"epiCache", ActivityLifeCycleEvent.DESTROY,lifecycleSubject,false,false);
-//        episode_recyclerView.setLayoutManager(linearLayoutManager);
-//        adapter = new RecyclerAdapter(getActivity());
-//        episode_recyclerView.setAdapter(adapter);
+        HttpUtils.getInstace().toSubscribe(epi, progressSubscriber,"epiCache", ActivityLifeCycleEvent.DESTROY,lifecycleSubject,true,true);
     }
-
-
 
     @Override
     public void onPause() {
@@ -179,17 +215,24 @@ public class EpisodeFragment extends Fragment {
             adaptr.destroy();
             adaptr=null;
         }
-        epiBeanList.clear();
-        startPage=1;
-        subscribe.unsubscribe();
-        subscribe=null;
-        if (timer!=null){
-            timer.cancel();
-            timer=null;
-            tt.cancel();
-            tt=null;
+        if (epiBeanList!=null){
+            epiBeanList.clear();
         }
+        startPage=1;
+        if (subscribe!=null){
+            subscribe.unsubscribe();
+            subscribe=null;
+        }
+        if (epiRefresh!=null){
+            epiRefresh.unsubscribe();
+            epiRefresh=null;
+        }
+        headBase.setContext();
         headBase=null;
         footer=null;
+        if (divide!=null){
+            divide=null;
+        }
+
     }
 }

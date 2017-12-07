@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="bwie.com.quarterhour.PublishEpiActivity">
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:paddingLeft="15px"
+        android:paddingRight="15px"
+        android:background="#03A9F4"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/tv_publish_back"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:textColor="#ffffff"
+            android:text="取消"
+            android:textSize="40px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="40px"
+            android:textColor="#ffffff"
+            android:layout_centerInParent="true"
+            android:text="创作"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:background="@drawable/publish_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/iv_publish_video"
+            android:layout_marginTop="100px"
+            android:src="@drawable/publish_video"
+            app:riv_oval="true"
+            android:layout_width="200px"
+            android:layout_height="200px" />
+
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/iv_publish_epi"
+            android:layout_marginTop="100px"
+            android:src="@drawable/publish_epi"
+            app:riv_oval="true"
+            android:layout_width="200px"
+            android:layout_height="200px" />
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+</com.zhy.autolayout.AutoLinearLayout>

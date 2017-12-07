@@ -71,23 +71,27 @@
         android:layout_height="wrap_content" />
 
     <com.zhy.autolayout.AutoLinearLayout
+        android:layout_marginBottom="20px"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="400px">
+        android:layout_height="500px"
+        >
 
         <ImageView
+            android:scaleType="fitXY"
             android:id="@+id/iv_moreView_one"
             android:layout_width="match_parent"
-            android:layout_height="400px"
+            android:layout_height="match_parent"
             android:layout_weight="1"/>
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="#ffffff"/>
         <ImageView
+            android:scaleType="centerCrop"
             android:id="@+id/iv_moreView_two"
             android:layout_width="match_parent"
-            android:layout_height="400px"
+            android:layout_height="match_parent"
             android:layout_weight="1"/>
 
     </com.zhy.autolayout.AutoLinearLayout>

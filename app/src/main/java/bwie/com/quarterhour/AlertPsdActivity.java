@@ -96,6 +96,11 @@ public class AlertPsdActivity extends BaseActivity {
     }
 
     @Override
+    protected boolean isSteepStateBar() {
+        return false;
+    }
+
+    @Override
     public void initIntentAnim() {
 
     }

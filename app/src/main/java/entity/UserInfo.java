@@ -15,4 +15,5 @@ public class UserInfo extends BaseEntity{
     public String nickname;
     public String token;
     public int uid;
+    public String username;
 }

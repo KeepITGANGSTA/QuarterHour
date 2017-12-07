@@ -85,11 +85,7 @@ public class HttpInterceptor implements Interceptor {
 
                 request = request.newBuilder().post(builder1.build()).build();
             }
-
-
-
         }
-
         return chain.proceed(request);
     }
 }

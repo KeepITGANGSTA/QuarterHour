@@ -11,8 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
-
-
         <toolbar.SimpleToolBar
             android:id="@+id/mToolbar"
             android:layout_width="match_parent"
@@ -23,8 +21,6 @@
             app:contentInsetLeft="0dp">
             <include layout="@layout/toolbar_view"/>
         </toolbar.SimpleToolBar>
-
-
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout

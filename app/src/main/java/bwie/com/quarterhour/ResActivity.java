@@ -130,6 +130,11 @@ public class ResActivity extends BaseActivity<LoginPresent> implements LoginView
     }
 
     @Override
+    protected boolean isSteepStateBar() {
+        return false;
+    }
+
+    @Override
     public void initIntentAnim() {
 
     }

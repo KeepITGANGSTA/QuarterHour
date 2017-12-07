@@ -77,11 +77,10 @@
         android:layout_height="500px">
 
         <include
-            android:visibility="gone"
-            android:id="@+id/include_play"
+            layout="@layout/simple_player_view_player"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            layout="@layout/simple_player_view_player"/>
+            android:layout_height="match_parent"/>
+
         <ImageView
             android:id="@+id/iv_publish"
             android:visibility="gone"
