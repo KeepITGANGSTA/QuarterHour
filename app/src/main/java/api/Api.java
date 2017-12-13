@@ -11,9 +11,11 @@ import entity.VideoInfo;
 import okhttp3.MultipartBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -35,9 +37,9 @@ public interface Api {
     @POST("quarter/getAd")
     Observable<BaseEntity<AdBean>> getAd(@Field("source") String source);
 
-    @FormUrlEncoded
-    @POST("quarter/getJokes")
-    Observable<BaseEntity<List<EpiBean>>> getEpi(@Field("page") String page);
+
+    @GET("quarter/getJokes")
+    Observable<BaseEntity<List<EpiBean>>> getEpi(@Query("page") String page);
 
     @Multipart
     @POST("quarter/publishJoke")
@@ -51,6 +53,4 @@ public interface Api {
     @FormUrlEncoded
     @POST("quarter/getVideos")
     Observable<BaseEntity<List<VideoInfo>>> getVideos(@Field("uid") String uid,@Field("type") String type,@Field("page") String page);
-
-
 }

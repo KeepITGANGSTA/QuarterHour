@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
+import java.io.File;
+
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
@@ -20,14 +23,18 @@ import utils.MyInterceptor;
 
 public class RetrofitHelper {
 
+    private File cacheFile;
     private static String baseUrl;
     private static Context context;
     private Retrofit retrofit;
     private OkHttpClient okHttpClient;
 
     private RetrofitHelper (){
+
+        Cache cache=new Cache(getNetCache(),10*1024*1024);
         okHttpClient=new OkHttpClient.Builder()
                 .addInterceptor(new HttpInterceptor())
+                .cache(cache)
                 .build();
         retrofit=new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -47,6 +54,16 @@ public class RetrofitHelper {
 
     public <T>T getApiService(Class<T> tClass){
         return retrofit.create(tClass);
+    }
+
+    public File getNetCache(){
+        if (cacheFile==null){
+            cacheFile=new File(BaseApp.AppContext.getCacheDir(),"/netCache");
+            if (!cacheFile.exists()){
+                cacheFile.mkdirs();
+            }
+        }
+        return cacheFile;
     }
 
 }

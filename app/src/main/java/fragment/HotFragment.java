@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.liaoinstan.springview.container.DefaultFooter;
@@ -27,6 +28,7 @@ import adapter.HotAdapter;
 import adapter.RecyclerAdapter;
 import api.Api;
 import api.Common;
+import bwie.com.basemodule.NetAval;
 import bwie.com.basemodule.RetrofitHelper;
 import bwie.com.basemodule.SharedPreferencesUtil;
 import bwie.com.quarterhour.App;
@@ -71,11 +73,13 @@ public class HotFragment extends Fragment {
     private String uid="";
     private int startPage=1;
     private ProgressSubscriber videoSubscriber;
-    private List<VideoInfo> videoCache;
     private List<VideoInfo> refreshList;
     private Subscription videoSub;
     private Api apiService;
     private Subscription moreSub;
+    private HeadBase headBase;
+    private DefaultFooter footer;
+    private Button btn_videoAgain;
 
     @Nullable
     @Override
@@ -89,7 +93,14 @@ public class HotFragment extends Fragment {
         }
         linearLayoutManager = new LinearLayoutManager(getActivity());
         apiService = RetrofitHelper.getRetrofitHelper(Common.BASE_URL, App.AppContext).getApiService(Api.class);
+        initView();
         return mRoot;
+    }
+
+    private void initView() {
+        recyclerView = mRoot.findViewById(R.id.hot_recyclerView);
+        sv=mRoot.findViewById(R.id.sv);
+        btn_videoAgain=mRoot.findViewById(R.id.btn_VideoAgain);
     }
 
     @Override
@@ -121,18 +132,20 @@ public class HotFragment extends Fragment {
         super.onStop();
     }
 
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         String SpIid = SharedPreferencesUtil.getPreferencesValue("uid");
         if (!TextUtils.isEmpty(uid)){
             uid=SpIid;
         }
-        recyclerView = mRoot.findViewById(R.id.hot_recyclerView);
-        sv=mRoot.findViewById(R.id.sv);
+
+        if (headBase==null){
+            headBase = new HeadBase(getActivity());
+            footer = new DefaultFooter(getActivity());
+        }
+        sv.setHeader(headBase);
+        sv.setFooter(footer);
         banner = LayoutInflater.from(getContext()).inflate(R.layout.banner_head,null);
         b = banner.findViewById(R.id.mBanner);
         b.setImageLoader(new BannerImage());
@@ -141,91 +154,133 @@ public class HotFragment extends Fragment {
         sv.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                videoSub = apiService.getVideos(uid, "1", 1 + "")
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<BaseEntity<List<VideoInfo>>>() {
-                            @Override
-                            public void onCompleted() {
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                System.out.println("刷新失败---" + e.toString());
-                            }
-
-                            @Override
-                            public void onNext(BaseEntity<List<VideoInfo>> listBaseEntity) {
-                                System.out.println("刷新成功---" + listBaseEntity.data.size());
-                                if (refreshList != null) {
-                                    refreshList.clear();
+                boolean b = NetAval.NetAvailable(App.AppContext);
+                if (b){
+                    videoSub = apiService.getVideos(uid, "1", 1 + "")
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Subscriber<BaseEntity<List<VideoInfo>>>() {
+                                @Override
+                                public void onCompleted() {
                                 }
-                                refreshList = listBaseEntity.data;
-                                adapter.setList(refreshList);
-                                sv.onFinishFreshAndLoad();
-                            }
-                        });
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    System.out.println("刷新失败---" + e.toString());
+                                }
+
+                                @Override
+                                public void onNext(BaseEntity<List<VideoInfo>> listBaseEntity) {
+                                    System.out.println("刷新成功---" + listBaseEntity.data.size());
+                                    if (refreshList != null) {
+                                        refreshList.clear();
+                                    }
+                                    refreshList = listBaseEntity.data;
+                                    adapter.setList(refreshList);
+                                    sv.onFinishFreshAndLoad();
+                                }
+                            });
+                }else {
+                    Toast.makeText(getActivity(), "网络不可用，请检查网络!", Toast.LENGTH_SHORT).show();
+                }
+
             }
             @Override
             public void onLoadmore() {
-                startPage++;
-                moreSub = apiService.getVideos(uid, "1", startPage + "")
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<BaseEntity<List<VideoInfo>>>() {
-                            @Override
-                            public void onCompleted() {
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                System.out.println("刷新失败---" + e.toString());
-                            }
-
-                            @Override
-                            public void onNext(BaseEntity<List<VideoInfo>> listBaseEntity) {
-                                System.out.println("刷新成功---" + listBaseEntity.data.size());
-                                adapter.setList(refreshList);
-                                for (VideoInfo datum : listBaseEntity.data) {
-                                    refreshList.add(datum);
+                boolean b = NetAval.NetAvailable(App.AppContext);
+                if (b){
+                    startPage++;
+                    moreSub = apiService.getVideos(uid, "1", startPage + "")
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Subscriber<BaseEntity<List<VideoInfo>>>() {
+                                @Override
+                                public void onCompleted() {
                                 }
-                                adapter.notifyDataSetChanged();
-                                sv.onFinishFreshAndLoad();
-                            }
-                        });
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    System.out.println("刷新失败---" + e.toString());
+                                }
+
+                                @Override
+                                public void onNext(BaseEntity<List<VideoInfo>> listBaseEntity) {
+                                    System.out.println("刷新成功---" + listBaseEntity.data.size());
+                                    adapter.setList(refreshList);
+                                    for (VideoInfo datum : listBaseEntity.data) {
+                                        refreshList.add(datum);
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                    sv.onFinishFreshAndLoad();
+                                }
+                            });
+                }else {
+                    Toast.makeText(getActivity(), "网络不可用，请检查网络!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
-        refreshList = Hawk.get("videoCache");
-        if (videoCache==null || videoCache.size()==0){
+        boolean netAvailable = NetAval.NetAvailable(App.AppContext);
+        if (netAvailable){
             getVideos();
         }else {
-            adapter = new HotAdapter(refreshList,getContext());
-            headerAndFooterWrapper = new HeaderAndFooterWrapper(adapter);
-            headerAndFooterWrapper.addHeaderView(banner);
-            recyclerView.setLayoutManager(linearLayoutManager);
-            recyclerView.setAdapter(headerAndFooterWrapper);
-            sv.setHeader(new HeadBase(getContext()));
-            sv.setFooter(new DefaultFooter(getContext()));
+            if (refreshList!=null){
+                refreshList.clear();
+            }
+            refreshList = Hawk.get("videoCache");
+            if (refreshList==null || refreshList.size()==0){
+                sv.setVisibility(View.GONE);
+                btn_videoAgain.setVisibility(View.VISIBLE);
+                btn_videoAgain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean b = NetAval.NetAvailable(App.AppContext);
+                        if (b){
+                            getVideos();
+                        }else {
+                            Toast.makeText(getActivity(), "网络不可用，请检查网络!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }else {
+                if (adapter==null){
+                    adapter = new HotAdapter(refreshList,getContext());
+                    headerAndFooterWrapper = new HeaderAndFooterWrapper(adapter);
+                    headerAndFooterWrapper.addHeaderView(banner);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    recyclerView.setAdapter(headerAndFooterWrapper);
+                }else{
+                    adapter.setList(refreshList);
+                }
+            }
         }
-        System.out.println("视频缓存数据-----"+ videoCache);
+
     }
 
     private void getVideos() {
         videoSubscriber = new ProgressSubscriber<List<VideoInfo>>(getContext()) {
             @Override
             public void _Next(List<VideoInfo> o) {
+                btn_videoAgain.setVisibility(View.GONE);
+                sv.setVisibility(View.VISIBLE);
+                if (refreshList!=null){
+                    refreshList.clear();
+                }
                 refreshList=o;
-                adapter = new HotAdapter(refreshList,getContext());
-                headerAndFooterWrapper = new HeaderAndFooterWrapper(adapter);
-                headerAndFooterWrapper.addHeaderView(banner);
-                recyclerView.setLayoutManager(linearLayoutManager);
-                recyclerView.setAdapter(headerAndFooterWrapper);
-                sv.setHeader(new HeadBase(getContext()));
-                sv.setFooter(new DefaultFooter(getContext()));
+                if (adapter==null){
+                    adapter = new HotAdapter(refreshList,getContext());
+                    headerAndFooterWrapper = new HeaderAndFooterWrapper(adapter);
+                    headerAndFooterWrapper.addHeaderView(banner);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    recyclerView.setAdapter(headerAndFooterWrapper);
+                }else {
+                    adapter.setList(refreshList);
+                }
+
             }
             @Override
             public void _OnError(String msg) {
-                System.out.println("视频请求失败---"+msg);
+                Toast.makeText(getActivity(), "请求超时!", Toast.LENGTH_SHORT).show();
             }
         };
         Observable video = apiService.getVideos(uid,"1",startPage+"");
@@ -239,9 +294,6 @@ public class HotFragment extends Fragment {
         if (videoSubscriber!=null){
             videoSubscriber.unsubscribe();
             videoSubscriber=null;
-        }
-        if (videoCache!=null){
-            videoCache.clear();
         }
         banner=null;
         banneriv.clear();
@@ -264,10 +316,12 @@ public class HotFragment extends Fragment {
             moreSub.unsubscribe();
             moreSub=null;
         }
-
+        if (headBase!=null){
+            headBase.setContext();
+            headBase.onFinishAnim();
+            footer.onFinishAnim();
+            headBase=null;
+            footer=null;
+        }
     }
-
-
-
-
 }

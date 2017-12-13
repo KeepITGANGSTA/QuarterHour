@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.widget.SpringView;
@@ -28,11 +29,13 @@ import adapter.RecyclerAdapter;
 import adapter.RecyclerViewDivide;
 import api.Api;
 import api.Common;
+import bwie.com.basemodule.NetAval;
 import bwie.com.basemodule.RetrofitHelper;
 import bwie.com.quarterhour.App;
 import bwie.com.quarterhour.R;
 import entity.BaseEntity;
 import entity.EpiBean;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -80,6 +83,7 @@ public class EpisodeFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getActivity());
         return mRoot;
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -92,60 +96,69 @@ public class EpisodeFragment extends Fragment {
         sv.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                Api apiService = RetrofitHelper.getRetrofitHelper(Common.BASE_URL, App.AppContext).getApiService(Api.class);
-                epiRefresh = apiService.getEpi("1")
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<BaseEntity<List<EpiBean>>>() {
-                            @Override
-                            public void onCompleted() {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                System.out.println("刷新失败---" + e.toString());
-                            }
-
-                            @Override
-                            public void onNext(BaseEntity<List<EpiBean>> listBaseEntity) {
-                                System.out.println("刷新成功---" + listBaseEntity.data.size());
-                                if (epiBeanList != null) {
-                                    epiBeanList.clear();
+                boolean b = NetAval.NetAvailable(App.AppContext);
+                if (b){
+                    Api apiService = RetrofitHelper.getRetrofitHelper(Common.BASE_URL, App.AppContext).getApiService(Api.class);
+                    epiRefresh = apiService.getEpi("1")
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Subscriber<BaseEntity<List<EpiBean>>>() {
+                                @Override
+                                public void onCompleted() {
                                 }
-                                epiBeanList = listBaseEntity.data;
-                                adaptr.refresh(epiBeanList);
-                                sv.onFinishFreshAndLoad();
-                            }
-                        });
+                                @Override
+                                public void onError(Throwable e) {
+                                    System.out.println("刷新失败---" + e.toString());
+                                }
+                                @Override
+                                public void onNext(BaseEntity<List<EpiBean>> listBaseEntity) {
+                                    System.out.println("刷新成功---" + listBaseEntity.data.size());
+                                    if (epiBeanList != null) {
+                                        epiBeanList.clear();
+                                    }
+                                    epiBeanList = listBaseEntity.data;
+                                    adaptr.refresh(epiBeanList);
+                                    sv.onFinishFreshAndLoad();
+                                }
+                            });
+                }else {
+                    Toast.makeText(getActivity(), "网络不可用，请检查网络!", Toast.LENGTH_SHORT).show();
+                    sv.onFinishFreshAndLoad();
+                }
 
             }
-
             @Override
             public void onLoadmore() {
-                Api apiService = RetrofitHelper.getRetrofitHelper(Common.BASE_URL, App.AppContext).getApiService(Api.class);
-                subscribe = apiService.getEpi((startPage + 1) + "").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<BaseEntity<List<EpiBean>>>() {
-                            @Override
-                            public void onCompleted() {
-                                sv.onFinishFreshAndLoad();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                System.out.println("分也失败-----"+e.toString());
-                            }
-
-                            @Override
-                            public void onNext(BaseEntity<List<EpiBean>> listBaseEntity) {
-                                List<EpiBean> data = listBaseEntity.data;
-                                for (EpiBean datum : data) {
-                                    epiBeanList.add(datum);
+                boolean b = NetAval.NetAvailable(App.AppContext);
+                if (b){
+                    Api apiService = RetrofitHelper.getRetrofitHelper(Common.BASE_URL, App.AppContext).getApiService(Api.class);
+                    subscribe = apiService.getEpi((startPage + 1) + "").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Subscriber<BaseEntity<List<EpiBean>>>() {
+                                @Override
+                                public void onCompleted() {
+                                    sv.onFinishFreshAndLoad();
                                 }
-                                adaptr.notifyDataSetChanged();
-                                System.out.println("分页成功---"+data.size());
-                            }
-                        });
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    System.out.println("分也失败-----"+e.toString());
+                                }
+
+                                @Override
+                                public void onNext(BaseEntity<List<EpiBean>> listBaseEntity) {
+                                    List<EpiBean> data = listBaseEntity.data;
+                                    for (EpiBean datum : data) {
+                                        epiBeanList.add(datum);
+                                    }
+                                    adaptr.notifyDataSetChanged();
+                                    System.out.println("分页成功---"+data.size());
+                                }
+                            });
+                }else {
+                    Toast.makeText(getActivity(), "网络不可用,请检查网络!", Toast.LENGTH_SHORT).show();
+                    sv.onFinishFreshAndLoad();
+                }
+
             }
         });
         episode_recyclerView=mRoot.findViewById(R.id.episode_recyclerView);
@@ -173,17 +186,16 @@ public class EpisodeFragment extends Fragment {
                 episode_recyclerView.addItemDecoration(divide);
                 episode_recyclerView.setAdapter(adaptr);
             }
-
             @Override
             public void _OnError(String msg) {
                 System.out.println("段子失败---"+msg);
-                if ("请求失败".equals(msg)){
-                    sv.setVisibility(View.GONE);
-                    btn_again.setVisibility(View.VISIBLE);
-                }
+//                if ("请求失败".equals(msg)){
+//                    sv.setVisibility(View.GONE);
+//                    btn_again.setVisibility(View.VISIBLE);
+//                }
             }
         };
-        HttpUtils.getInstace().toSubscribe(epi, progressSubscriber,"epiCache", ActivityLifeCycleEvent.DESTROY,lifecycleSubject,true,true);
+        HttpUtils.getInstace().toSubscribe(epi, progressSubscriber,"epiCache", ActivityLifeCycleEvent.DESTROY,lifecycleSubject,false,false);
     }
 
     @Override

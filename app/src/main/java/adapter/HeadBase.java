@@ -155,20 +155,26 @@ public class HeadBase extends BaseHeader {
 
     @Override
     public void onFinishAnim() {
-        timer.cancel();
-        timer=null;
-        tt.cancel();
-        tt=null;
-        System.out.println("---------结束");
-        rotation.cancel();
-        rotation=null;
-        for (int i = 0; i < id; i++) {
-            ObjectAnimator objectAnimator = list.get(i);
-            objectAnimator.cancel();
-            objectAnimator=null;
+        if (timer!=null){
+            timer.cancel();
+            timer=null;
+            tt.cancel();
+            tt=null;
         }
-        list.clear();
-        list=null;
+        System.out.println("---------结束");
+        if (rotation!=null){
+            rotation.cancel();
+            rotation=null;
+        }
+        if (list!=null){
+            for (int i = 0; i < id; i++) {
+                ObjectAnimator objectAnimator = list.get(i);
+                objectAnimator.cancel();
+                objectAnimator=null;
+            }
+            list.clear();
+            list=null;
+        }
         view=null;
         linearLayout=null;
     }

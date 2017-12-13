@@ -14,4 +14,17 @@
                 android:layout_height="match_parent"/>
     </com.liaoinstan.springview.widget.SpringView>
 
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btn_VideoAgain"
+        android:textSize="40px"
+        android:textColor="#ffffff"
+        android:text="重试"
+        android:layout_marginTop="500px"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_login"
+        android:layout_width="300px"
+        android:layout_height="100px" />
+
 </LinearLayout>

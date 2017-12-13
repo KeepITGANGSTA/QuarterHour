@@ -267,7 +267,4 @@ public abstract class BaseActivity<P extends BasePresent> extends AppCompatActiv
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
     }
-
-
-
 }

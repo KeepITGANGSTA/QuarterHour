@@ -105,11 +105,7 @@ public class HomeActivity extends BaseActivity {
     private TimerTask timerTask;
     private FragmentTransaction fragmentTransaction;
 
-    private View inflate;
-    private Button choosePhoto;
-    private Button takePhoto;
-    private Button btn_can;
-    private Dialog dialog;
+
     private AlertDialog.Builder adb;
     private AlertDialog show;
 
@@ -232,7 +228,9 @@ public class HomeActivity extends BaseActivity {
                     };
                     timer.schedule(timerTask,1000);
                 }else {
-                    showUserDialog();
+                    //showUserDialog();
+                    Intent intent=new Intent(this,PersonalActivity.class);
+                    startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                 }
                 break;
             case R.id.tv_idvg:
@@ -244,44 +242,10 @@ public class HomeActivity extends BaseActivity {
             case R.id.left_setting:
                 Toast.makeText(HomeActivity.this, "设置", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.takePhoto:
-                Toast.makeText(this, "修改昵称", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-                break;
-            case R.id.choosePhoto:
-                Toast.makeText(this, "修改个性签名", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-                break;
-            case R.id.btn_qu:
-                Toast.makeText(this, "退出登录", Toast.LENGTH_SHORT).show();
-                SharedPreferencesUtil.clearPreferences("uid");
-                SharedPreferencesUtil.clearPreferences("token");
-                Hawk.delete("UserInfo");
-                iv_drawerlayout_icon.setImageResource(R.drawable.lefticon);
-                tv_userName.setText("尚未登陆");
-                dialog.dismiss();
-                break;
         }
     }
 
-    private void showUserDialog() {
-        dialog = new Dialog(this,R.style.DialogSelect);
-        inflate = LayoutInflater.from(this).inflate(R.layout.cancle, null);
-        choosePhoto = (Button) inflate.findViewById(R.id.choosePhoto);
-        takePhoto = (Button) inflate.findViewById(R.id.takePhoto);
-        btn_can = (Button) inflate.findViewById(R.id.btn_qu);
-        choosePhoto.setOnClickListener(this);
-        takePhoto.setOnClickListener(this);
-        btn_can.setOnClickListener(this);
-        dialog.setContentView(inflate);
-        Window dialogWindow = dialog.getWindow();
-        dialogWindow.setGravity( Gravity.BOTTOM);
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-        lp.y = 10;
-        lp.width=App.screen_width-20;
-        dialogWindow.setAttributes(lp);
-        dialog.show();
-    }
+
 
     @Override
     public void initIntentAnim() {
@@ -381,14 +345,6 @@ public class HomeActivity extends BaseActivity {
         videoFragment=null;
         ivlist.clear();
         title.clear();
-        if (dialog!=null){
-            if (dialog.isShowing()){
-                dialog.dismiss();
-            }
-            dialog.cancel();
-            dialog=null;
-            inflate=null;
-        }
         if (adb!=null){
             adb=null;
             if (show.isShowing()){

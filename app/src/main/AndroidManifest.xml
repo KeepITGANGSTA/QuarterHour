@@ -23,7 +23,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="glide.GlideCache" android:value="GlideModule"/>
+        <meta-data
+            android:name="glide.GlideCache"
+            android:value="GlideModule" />
         <meta-data
             android:name="design_width"
             android:value="1080" />
@@ -66,7 +68,8 @@
                 android:resource="@xml/file_paths_public" />
         </provider>
 
-        <activity android:name=".PublishEpisodeActivity"></activity>
+        <activity android:name=".PublishEpisodeActivity" />
+        <activity android:name=".PersonalActivity"></activity>
     </application>
 
 </manifest>

@@ -1,12 +1,20 @@
 package adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import bwie.com.quarterhour.App;
 import bwie.com.quarterhour.R;
 
 /**
@@ -17,16 +25,22 @@ import bwie.com.quarterhour.R;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Myholder> {
 
     private Context mContext;
-    private String[] strs = new String[100];
     private View view;
     private Myholder myholder;
+    private List<Integer> mHeight;
 
     public RecyclerAdapter(Context mContext) {
         this.mContext = mContext;
-        for (int i = 0; i < 30; i++) {
-            strs[i] = i + "";
+        mHeight=new ArrayList<>();
+        Random random=new Random();
+        for (int i = 0; i < 20; i++) {
+            int s=random.nextInt(401)%(401-400+1)+400;
+            mHeight.add(s);
+            System.out.println("随机数----------"+s);
         }
     }
+
+
 
     @Override
     public Myholder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -37,25 +51,28 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Myhold
 
     @Override
     public void onBindViewHolder(Myholder holder, int position) {
-        holder.textView.setText(strs[position]);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(App.screen_width/2,mHeight.get(position));
+        System.out.println("holder.itemView-------------"+holder.itemView);
+        System.out.println("layoutParams--------"+layoutParams);
+        holder.itemView.setLayoutParams(layoutParams);
+        holder.textView.setImageResource(R.drawable.phonelogin_bg);
     }
 
     @Override
     public int getItemCount() {
-        return strs.length;
+        return mHeight.size();
     }
 
     static class Myholder extends RecyclerView.ViewHolder {
-        TextView textView;
+        private ImageView textView;
         public Myholder(View itemView) {
             super(itemView);
-            textView=itemView.findViewById(R.id.tv_item);
+            textView=itemView.findViewById(R.id.iv_VideoHot);
         }
     }
 
     public void destroy(){
         mContext=null;
-        strs=null;
         if (view!=null){
             view=null;
         }

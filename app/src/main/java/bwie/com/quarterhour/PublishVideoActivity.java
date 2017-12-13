@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -30,6 +32,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.PictureFileUtils;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import adapter.FullyGridLayoutManager;
 import adapter.GridImageAdapter;
@@ -40,6 +43,7 @@ import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
 import present.PublishPublish;
+import rx.functions.Action1;
 import view.PublishView;
 
 public class PublishVideoActivity extends BaseActivity<PublishPublish> implements PublishView,GridImageAdapter.onAddPicClickListener{
@@ -92,7 +96,24 @@ public class PublishVideoActivity extends BaseActivity<PublishPublish> implement
 
     @Override
     public void initData() {
-
+        RxView.clicks(tv_publish).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(aVoid -> {
+                    String epi_content=ed_content.getText().toString();
+                    if (TextUtils.isEmpty(epi_content)){
+                        Toast.makeText(PublishVideoActivity.this, "请输入内容", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (list!=null && list.size()!=0){
+                        Toast.makeText(PublishVideoActivity.this, "集合长度："+list.size(), Toast.LENGTH_SHORT).show();
+                        String path = list.get(0).getPath();
+                        System.out.println("path---------------"+path);
+                        basePresent.publishEpi(SharedPreferencesUtil.getPreferencesValue("uid"),epi_content,list,PublishVideoActivity.this,lifecycleSubject);
+                    }
+                    if (list==null || list.size()==0){
+                        Toast.makeText(PublishVideoActivity.this, "集合长度："+list, Toast.LENGTH_SHORT).show();
+                        basePresent.publishEpi(SharedPreferencesUtil.getPreferencesValue("uid"),epi_content,null,PublishVideoActivity.this,lifecycleSubject);
+                    }
+                });
     }
 
     @Override
@@ -102,24 +123,26 @@ public class PublishVideoActivity extends BaseActivity<PublishPublish> implement
                 finishAfterTransition();
                 break;
             case R.id.tv_creation_publish:
-                String epi_content=ed_content.getText().toString();
-                if (TextUtils.isEmpty(epi_content)){
-                    Toast.makeText(this, "请输入内容", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (list!=null && list.size()!=0){
-                    Toast.makeText(this, "集合长度："+list.size(), Toast.LENGTH_SHORT).show();
-                    String path = list.get(0).getPath();
-                    System.out.println("path---------------"+path);
-                    basePresent.publishEpi(SharedPreferencesUtil.getPreferencesValue("uid"),epi_content,list,this,lifecycleSubject);
-                }
-                if (list==null || list.size()==0){
-                    Toast.makeText(this, "集合长度："+list, Toast.LENGTH_SHORT).show();
-                    basePresent.publishEpi(SharedPreferencesUtil.getPreferencesValue("uid"),epi_content,null,this,lifecycleSubject);
-                }
+//                String epi_content=ed_content.getText().toString();
+//                if (TextUtils.isEmpty(epi_content)){
+//                    Toast.makeText(this, "请输入内容", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if (list!=null && list.size()!=0){
+//                    Toast.makeText(this, "集合长度："+list.size(), Toast.LENGTH_SHORT).show();
+//                    String path = list.get(0).getPath();
+//                    System.out.println("path---------------"+path);
+//                    basePresent.publishEpi(SharedPreferencesUtil.getPreferencesValue("uid"),epi_content,list,this,lifecycleSubject);
+//                }
+//                if (list==null || list.size()==0){
+//                    Toast.makeText(this, "集合长度："+list, Toast.LENGTH_SHORT).show();
+//                    basePresent.publishEpi(SharedPreferencesUtil.getPreferencesValue("uid"),epi_content,null,this,lifecycleSubject);
+//                }
                 break;
         }
     }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         PermissionGen.onRequestPermissionsResult(PublishVideoActivity.this,requestCode,permissions,grantResults);

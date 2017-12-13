@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.jakewharton.rxbinding.view.RxView;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -45,6 +46,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import bwie.com.basemodule.BaseActivity;
 import bwie.com.basemodule.SharedPreferencesUtil;
@@ -52,6 +54,7 @@ import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
 import present.PublishPublish;
+import rx.functions.Action1;
 import view.PublishView;
 
 public class PublishEpisodeActivity extends BaseActivity<PublishPublish> implements PublishView{
@@ -126,6 +129,22 @@ public class PublishEpisodeActivity extends BaseActivity<PublishPublish> impleme
             }
             return false;
         });
+
+        RxView.clicks(tv_video_publish)
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(aVoid -> {
+                    if (list!=null && list.size()!=0){
+                        String s = ed_videoDesc.getText().toString();
+                        if (TextUtils.isEmpty(s)){
+                            basePresent.publishVideo(SharedPreferencesUtil.getPreferencesValue("uid"),"",list,PublishEpisodeActivity.this,lifecycleSubject);
+                        }else {
+                            basePresent.publishVideo(SharedPreferencesUtil.getPreferencesValue("uid"),s,list,PublishEpisodeActivity.this,lifecycleSubject);
+                        }
+                    }else {
+                        Toast.makeText(PublishEpisodeActivity.this, "先录制一个视频吧~", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 
     @Override
@@ -173,7 +192,9 @@ public class PublishEpisodeActivity extends BaseActivity<PublishPublish> impleme
 
     private void initVideo(List<LocalMedia> list) {
         LocalMedia media = list.get(0);
+        RequestOptions options=new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
         Glide.with(App.AppContext)
+                .applyDefaultRequestOptions(options)
                     .load(media.getPath())
                     .into(iv_gifVideo);
 
@@ -201,17 +222,16 @@ public class PublishEpisodeActivity extends BaseActivity<PublishPublish> impleme
                 }
                 break;
             case R.id.tv_video_publish:
-                if (list!=null && list.size()!=0){
-                    String s = ed_videoDesc.getText().toString();
-                    if (TextUtils.isEmpty(s)){
-                        basePresent.publishVideo(SharedPreferencesUtil.getPreferencesValue("uid"),"",list,PublishEpisodeActivity.this,lifecycleSubject);
-                    }else {
-                        basePresent.publishVideo(SharedPreferencesUtil.getPreferencesValue("uid"),s,list,PublishEpisodeActivity.this,lifecycleSubject);
-                    }
-                }else {
-                    Toast.makeText(this, "先录制一个视频吧~", Toast.LENGTH_SHORT).show();
-                }
-
+//                if (list!=null && list.size()!=0){
+//                    String s = ed_videoDesc.getText().toString();
+//                    if (TextUtils.isEmpty(s)){
+//                        basePresent.publishVideo(SharedPreferencesUtil.getPreferencesValue("uid"),"",list,PublishEpisodeActivity.this,lifecycleSubject);
+//                    }else {
+//                        basePresent.publishVideo(SharedPreferencesUtil.getPreferencesValue("uid"),s,list,PublishEpisodeActivity.this,lifecycleSubject);
+//                    }
+//                }else {
+//                    Toast.makeText(this, "先录制一个视频吧~", Toast.LENGTH_SHORT).show();
+//                }
                 break;
         }
     }

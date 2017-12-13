@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import bwie.com.basemodule.BaseApp;
+import bwie.com.basemodule.NetAval;
+import bwie.com.basemodule.NetUtils;
 import bwie.com.basemodule.SharedPreferencesUtil;
+import okhttp3.CacheControl;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -27,6 +31,9 @@ import okhttp3.Response;
  */
 
 public class HttpInterceptor implements Interceptor {
+
+    private Response response;
+
     @Override
     public Response intercept(Chain chain) throws IOException {
 
@@ -41,7 +48,6 @@ public class HttpInterceptor implements Interceptor {
         hashmap.put("source","android");
         hashmap.put("appVersion",101);
         hashmap.put("token",token+"" );
-
 
         //get请求的封装
         if(method.equals("GET")){
@@ -58,12 +64,25 @@ public class HttpInterceptor implements Interceptor {
             }
             System.out.println("拦截后的url=="+newUrl);
             request = request.newBuilder().url(newUrl).build();  //重新构建请求
-
+            boolean b = NetAval.NetAvailable(BaseApp.AppContext);
+            if (b){
+                request=request.newBuilder().cacheControl(CacheControl.FORCE_NETWORK).build();
+            }else {
+                request=request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build();
+            }
+            response = chain.proceed(request);
+            if (b){
+                response = response.newBuilder().removeHeader("Prama")
+                        .header("Cache-Control","public,max-age="+10)
+                        .build();
+            }else {
+                response = response.newBuilder().removeHeader("Prama")
+                        .header("Cache-Control","public,only-if-cached,max-stale="+20).build();
+            }
         }else if (method.equals("POST")){
             FormBody.Builder builder = new FormBody.Builder();
             if(request.body() instanceof FormBody){
             FormBody formBody = (FormBody) request.body();//初始body
-
                 for (int i = 0; i < formBody.size() ; i++) {
                     builder.add(formBody.encodedName(i),formBody.encodedValue(i));
                 }
@@ -82,10 +101,10 @@ public class HttpInterceptor implements Interceptor {
                 for (MultipartBody.Part part : parts) {
                     builder1.addPart(part);
                 }
-
                 request = request.newBuilder().post(builder1.build()).build();
             }
+            response=chain.proceed(request);
         }
-        return chain.proceed(request);
+        return response;
     }
 }

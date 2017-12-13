@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 tt=new TimerTask() {
                     @Override
                     public void run() {
-                        finishAfterTransition();
+                        runOnUiThread(() -> finishAfterTransition());
                     }
                 };
                 timer.schedule(tt,1000);

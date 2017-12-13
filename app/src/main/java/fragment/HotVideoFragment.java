@@ -6,11 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import adapter.RecyclerAdapter;
+import adapter.SpacesItemDecoration;
 import bwie.com.quarterhour.R;
 
 /**
@@ -23,7 +25,7 @@ public class HotVideoFragment extends Fragment {
     private View mRoot;
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
-    private LinearLayoutManager linearLayoutManager;
+    private StaggeredGridLayoutManager manager;
 
     @Nullable
     @Override
@@ -35,7 +37,7 @@ public class HotVideoFragment extends Fragment {
         if (parent!=null){
             parent.removeView(mRoot);
         }
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        manager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         return mRoot;
     }
 
@@ -43,9 +45,11 @@ public class HotVideoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         recyclerView = mRoot.findViewById(R.id.video_hot_recyclerView);
-
+        recyclerView.setPadding(8,8,8,8);
+        SpacesItemDecoration decoration=new SpacesItemDecoration(8);
         adapter = new RecyclerAdapter(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.addItemDecoration(decoration);
         recyclerView.setAdapter(adapter);
     }
 
@@ -55,6 +59,6 @@ public class HotVideoFragment extends Fragment {
         mRoot=null;
         adapter.destroy();
         adapter=null;
-        linearLayoutManager=null;
+        manager=null;
     }
 }

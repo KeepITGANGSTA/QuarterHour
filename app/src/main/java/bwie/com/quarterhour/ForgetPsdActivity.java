@@ -14,11 +14,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mob.MobSDK;
 import com.zhy.autolayout.attr.PaddingRightAttr;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import api.Api;
 import bwie.com.basemodule.RetrofitHelper;
@@ -26,6 +29,10 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import entity.UserInfo;
 import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 import utils.ActivityLifeCycleEvent;
 import utils.HttpUtils;
@@ -47,7 +54,6 @@ public class ForgetPsdActivity extends AppCompatActivity implements View.OnClick
 
     private EventHandler eventHandler;
     private ProgressSubscriber progressSubscriber;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +65,53 @@ public class ForgetPsdActivity extends AppCompatActivity implements View.OnClick
         initView();
         MobSDK.init(this,"22bd5fa3035b0","c66f4b79c050a0477a0c36cf77551405");
         initSMSS();
+
+        Observable<Void> voidObservable = RxView.clicks(btn_getCode)
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Toast.makeText(ForgetPsdActivity.this, "获取验证码", Toast.LENGTH_SHORT).show();
+                        String phone = ed_forgetPhone.getText().toString();
+                        if (TextUtils.isEmpty(phone)) {
+                            Toast.makeText(ForgetPsdActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (phone.length() != 11) {
+                            Toast.makeText(ForgetPsdActivity.this, "请输入正确手机号", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        SMSSDK.getVerificationCode("86", phone);
+                        RxView.enabled(btn_getCode).call(false);
+                        //testLogin(phone);
+                    }
+                });
+        voidObservable.subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Observable.interval(1,TimeUnit.SECONDS,AndroidSchedulers.mainThread())
+                        .take(60)
+                        .subscribe(new Observer<Long>() {
+                            @Override
+                            public void onCompleted() {
+                                RxTextView.text(btn_getCode).call("获取验证码");
+                                RxView.enabled(btn_getCode).call(true);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(Long aLong) {
+                                RxTextView.text(btn_getCode).call((60-aLong)+"秒");
+                            }
+                        });
+            }
+        });
+
     }
 
     private void initSMSS() {
@@ -141,18 +194,18 @@ public class ForgetPsdActivity extends AppCompatActivity implements View.OnClick
                 };
                 timer.schedule(timerTask,1000);
                 break;
-            case R.id.btn_getCode:
-                String phone=ed_forgetPhone.getText().toString();
-                if (TextUtils.isEmpty(phone)){
-                    Toast.makeText(this, "手机号不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (phone.length()!=11){
-                    Toast.makeText(this, "请输入正确手机号", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                testLogin(phone);
-                break;
+//            case R.id.btn_getCode:
+//                String phone=ed_forgetPhone.getText().toString();
+//                if (TextUtils.isEmpty(phone)){
+//                    Toast.makeText(this, "手机号不能为空", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if (phone.length()!=11){
+//                    Toast.makeText(this, "请输入正确手机号", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                testLogin(phone);
+//                break;
             case R.id.btn_forgetNext:
                 String vphone=ed_forgetPhone.getText().toString();
                 String vcode=ed_veriCode.getText().toString();
@@ -174,32 +227,27 @@ public class ForgetPsdActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    /**
-     *  验证手机号
-     * @param phone
-     */
-    private void testLogin(String phone) {
-        Api apiService = RetrofitHelper.getRetrofitHelper("https://www.zhaoapi.cn/",this).getApiService(Api.class);
-        Observable login = apiService.login(phone,"111111");
-        progressSubscriber = new ProgressSubscriber<UserInfo>(this) {
-            @Override
-            public void _Next(UserInfo o) {
-                System.out.println("成功---"+o.nickname);
-                SMSSDK.getVerificationCode("86",phone);
-            }
-            @Override
-            public void _OnError(String msg) {
-                if ("尚未注册".equals(msg)){
-                    Toast.makeText(ForgetPsdActivity.this, "改手机号"+msg, Toast.LENGTH_SHORT).show();
-                }else {
-                    SMSSDK.getVerificationCode("86",phone);
-                }
 
-            }
-        };
-        HttpUtils.getInstace().toSubscribe(login,progressSubscriber ,"testPhoneCache", ActivityLifeCycleEvent.PAUSE,lifecycleSubject,false,false);
-
-    }
+//    private void testLogin(String phone) {
+//        Api apiService = RetrofitHelper.getRetrofitHelper("https://www.zhaoapi.cn/",this).getApiService(Api.class);
+//        Observable login = apiService.login(phone,"111111");
+//        progressSubscriber = new ProgressSubscriber<UserInfo>(this) {
+//            @Override
+//            public void _Next(UserInfo o) {
+//                System.out.println("成功---"+o.nickname);
+//                SMSSDK.getVerificationCode("86",phone);
+//            }
+//            @Override
+//            public void _OnError(String msg) {
+//                if ("尚未注册".equals(msg)){
+//                    Toast.makeText(ForgetPsdActivity.this, "改手机号"+msg, Toast.LENGTH_SHORT).show();
+//                }else {
+//                    SMSSDK.getVerificationCode("86",phone);
+//                }
+//            }
+//        };
+//        HttpUtils.getInstace().toSubscribe(login,progressSubscriber ,"testPhoneCache", ActivityLifeCycleEvent.PAUSE,lifecycleSubject,false,false);
+//    }
 
 
 
@@ -233,11 +281,16 @@ public class ForgetPsdActivity extends AppCompatActivity implements View.OnClick
             tt2=null;
         }
         lifecycleSubject=null;
-        progressSubscriber.dismissProgressDialog();
-        if (progressSubscriber.isUnsubscribed()){
-            progressSubscriber.unsubscribe();
+        if (progressSubscriber!=null){
+            progressSubscriber.dismissProgressDialog();
+            if (progressSubscriber.isUnsubscribed()){
+                progressSubscriber.unsubscribe();
+            }
+            progressSubscriber=null;
         }
-        progressSubscriber=null;
+
+
+
 
     }
 
