@@ -1,5 +1,6 @@
 package api;
 
+import java.io.File;
 import java.util.List;
 
 import entity.AdBean;
@@ -7,8 +8,12 @@ import entity.BaseEntity;
 import entity.EpiBean;
 import entity.UserInfo;
 
+import entity.UserInfoBean;
+import entity.VideoDetails;
 import entity.VideoInfo;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -53,4 +58,43 @@ public interface Api {
     @FormUrlEncoded
     @POST("quarter/getVideos")
     Observable<BaseEntity<List<VideoInfo>>> getVideos(@Field("uid") String uid,@Field("type") String type,@Field("page") String page);
+
+    @FormUrlEncoded
+    @POST("quarter/getVideoDetail")
+    Observable<BaseEntity<VideoDetails>> getVideoDetails(@Field("wid") String wid);
+
+    @FormUrlEncoded
+    @POST("quarter/addFavorite")
+    Observable<BaseEntity<Object>> collectVideo(@Field("uid") String uid , @Field("wid") String wid);
+
+    @FormUrlEncoded
+    @POST("quarter/praise")
+    Observable<BaseEntity<Object>> pariseVideo(@Field("uid") String uid , @Field("wid") String wid);
+
+    @FormUrlEncoded
+    @POST("quarter/cancelFavorite")
+    Observable<BaseEntity<Object>> cancelVideoCollect(@Field("uid") String uid , @Field("wid") String wid);
+
+    @FormUrlEncoded
+    @POST("quarter/comment")
+    Observable<BaseEntity<Object>> commentsVideo(@Field("uid") String uid , @Field("wid") String wid,@Field("content") String content);
+
+
+    @FormUrlEncoded
+    @POST("quarter/getWorkInfo")
+    Observable<BaseEntity<UserInfoBean>> getUserInfo(@Field("uid") String uid );
+
+    @FormUrlEncoded
+    @POST("quarter/follow")
+    Observable<BaseEntity<Object>> follow(@Field("uid") String uid , @Field("followId") String followId);
+
+
+    @Multipart
+    @POST("file/upload")
+    Observable<BaseEntity<Object>> updateIcon(@Part List<MultipartBody.Part> list);
+
+    @FormUrlEncoded
+    @POST("user/getUserInfo")
+    Observable<BaseEntity<UserInfo>> UserInfo(@Field("uid") String uid);
+
 }

@@ -1,5 +1,8 @@
 package fragment;
 
+import android.app.ActivityManager;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.widget.SpringView;
 import com.orhanobut.hawk.Hawk;
@@ -32,7 +36,13 @@ import bwie.com.basemodule.NetAval;
 import bwie.com.basemodule.RetrofitHelper;
 import bwie.com.basemodule.SharedPreferencesUtil;
 import bwie.com.quarterhour.App;
+import bwie.com.quarterhour.PhoneLoginActivity;
 import bwie.com.quarterhour.R;
+import bwie.com.quarterhour.VideoDetailsActivity;
+import cn.jzvd.JZMediaManager;
+import cn.jzvd.JZUtils;
+import cn.jzvd.JZVideoPlayer;
+import cn.jzvd.JZVideoPlayerManager;
 import entity.AdBean;
 import entity.BaseEntity;
 import entity.EpiBean;
@@ -101,6 +111,39 @@ public class HotFragment extends Fragment {
         recyclerView = mRoot.findViewById(R.id.hot_recyclerView);
         sv=mRoot.findViewById(R.id.sv);
         btn_videoAgain=mRoot.findViewById(R.id.btn_VideoAgain);
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                switch (newState){
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        if (getActivity().isDestroyed()==true){
+                            Glide.with(getActivity()).pauseRequests();
+                        }
+                        break;
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        if (getActivity().isDestroyed()==true){
+                            Glide.with(getActivity()).pauseRequests();
+                        }
+                        break;
+                }
+            }
+        });
+        recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(View view) {
+                JZVideoPlayer viewById = view.findViewById(R.id.mGiraffe);
+                if (viewById != null && JZUtils.dataSourceObjectsContainsUri(viewById.dataSourceObjects, JZMediaManager.getCurrentDataSource())) {
+                    JZVideoPlayer.releaseAllVideos();
+                }
+            }
+        });
+
+
     }
 
     @Override
@@ -123,8 +166,11 @@ public class HotFragment extends Fragment {
     @Override
     public void onPause() {
         lifecycleSubject.onNext(ActivityLifeCycleEvent.PAUSE);
+        JZVideoPlayer.releaseAllVideos();
         super.onPause();
     }
+
+
 
     @Override
     public void onStop() {
@@ -139,7 +185,6 @@ public class HotFragment extends Fragment {
         if (!TextUtils.isEmpty(uid)){
             uid=SpIid;
         }
-
         if (headBase==null){
             headBase = new HeadBase(getActivity());
             footer = new DefaultFooter(getActivity());
@@ -182,6 +227,7 @@ public class HotFragment extends Fragment {
                             });
                 }else {
                     Toast.makeText(getActivity(), "网络不可用，请检查网络!", Toast.LENGTH_SHORT).show();
+                    sv.onFinishFreshAndLoad();
                 }
 
             }
@@ -205,19 +251,20 @@ public class HotFragment extends Fragment {
 
                                 @Override
                                 public void onNext(BaseEntity<List<VideoInfo>> listBaseEntity) {
-                                    System.out.println("刷新成功---" + listBaseEntity.data.size());
-                                    adapter.setList(refreshList);
+                                    System.out.println("加载更多成功---" + listBaseEntity.data.size());
                                     for (VideoInfo datum : listBaseEntity.data) {
                                         refreshList.add(datum);
                                     }
+                                    System.out.println("添加更多---"+refreshList.size());
                                     adapter.notifyDataSetChanged();
                                     sv.onFinishFreshAndLoad();
+//                                    adapter.setList(refreshList);
                                 }
                             });
                 }else {
                     Toast.makeText(getActivity(), "网络不可用，请检查网络!", Toast.LENGTH_SHORT).show();
+                    sv.onFinishFreshAndLoad();
                 }
-
             }
         });
         boolean netAvailable = NetAval.NetAvailable(App.AppContext);
@@ -252,9 +299,14 @@ public class HotFragment extends Fragment {
                 }else{
                     adapter.setList(refreshList);
                 }
+                adapter.setOnItemClickVideo((videoInfo, position) -> {
+                    Toast.makeText(getActivity(), "位置:"+position+",wid："+videoInfo.wid, Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(getContext(), VideoDetailsActivity.class);
+                    intent.putExtra("videoWid",videoInfo.wid);
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                });
             }
         }
-
     }
 
     private void getVideos() {
@@ -276,6 +328,12 @@ public class HotFragment extends Fragment {
                 }else {
                     adapter.setList(refreshList);
                 }
+                adapter.setOnItemClickVideo((videoInfo, position) -> {
+                    Toast.makeText(getActivity(), "位置:"+position+",wid："+videoInfo.wid, Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(getContext(), VideoDetailsActivity.class);
+                    intent.putExtra("videoWid",videoInfo.wid);
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                });
 
             }
             @Override

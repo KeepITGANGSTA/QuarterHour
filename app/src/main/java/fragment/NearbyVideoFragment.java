@@ -45,9 +45,9 @@ public class NearbyVideoFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         recyclerView = mRoot.findViewById(R.id.video_nearby_recyclerView);
 
-        adapter = new RecyclerAdapter(getActivity().getApplicationContext());
+       // adapter = new RecyclerAdapter(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
+        //recyclerView.setAdapter(adapter);
 
     }
 
@@ -57,7 +57,10 @@ public class NearbyVideoFragment extends Fragment {
         mRoot=null;
         linearLayoutManager=null;
         recyclerView=null;
-        adapter.destroy();
-        adapter=null;
+        if (adapter!=null){
+            adapter.destroy();
+            adapter=null;
+        }
+
     }
 }

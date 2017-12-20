@@ -7,14 +7,17 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:listDivider">@drawable/divide</item>
-
+        <item name="android:windowIsTranslucent">true</item>
+        
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
         <item name="android:windowExitTransition" tools:targetApi="lollipop">@transition/explode</item>
         <item name="android:windowEnterAnimation">@transition/explode</item>
         <item name="android:windowReenterTransition" tools:targetApi="lollipop">@transition/explode</item>
-
     </style>
 
+    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
     <style name="DialogSelect" parent="@android:style/Theme.Dialog">
         <!-- 背景透明 -->

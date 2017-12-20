@@ -75,9 +75,9 @@ public class InterestFragment extends Fragment {
                 }
             });
         }else {
-            adapter = new RecyclerAdapter(getActivity().getApplicationContext());
+           // adapter = new RecyclerAdapter(getActivity().getApplicationContext());
             interest_recyclerView.setLayoutManager(linearLayoutManager);
-            interest_recyclerView.setAdapter(adapter);
+            //interest_recyclerView.setAdapter(adapter);
         }
 
     }

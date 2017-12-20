@@ -29,7 +29,7 @@ public class FileUtils {
         return size;
     }
 
-    // 格式化单位
+
     public static String getFormatSize(double fileSize) {
         DecimalFormat decimalFormat=new DecimalFormat("#.00");
         String size="";

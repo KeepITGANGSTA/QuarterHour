@@ -72,10 +72,12 @@ public class PublishModel implements IPublishEpi {
             public void _Next(Object o) {
                 netCallBack.RequestSuccess("发布成功");
                 Toast.makeText(context, "发布成功", Toast.LENGTH_SHORT).show();
+                destroy();
             }
 
             @Override
             public void _OnError(String msg) {
+                destroy();
                 netCallBack.RequestFail(msg);
                 Toast.makeText(context, "发布失败："+msg, Toast.LENGTH_SHORT).show();
             }
@@ -92,6 +94,7 @@ public class PublishModel implements IPublishEpi {
         for (LocalMedia localMedia : list) {
                 System.out.println("视频路径---"+localMedia.getPath());
                 file = new File(localMedia.getPath());
+                System.out.println("视频文件是否存在---======="+file.exists());
                 requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                 Videobuilder.addFormDataPart("videoFile", file.getName(), requestBody);
         }
@@ -108,10 +111,12 @@ public class PublishModel implements IPublishEpi {
             @Override
             public void _Next(Object o) {
                 netCallBack.RequestSuccess("发布视频成功");
+                destroy();
             }
 
             @Override
             public void _OnError(String msg) {
+                destroy();
                 netCallBack.RequestFail(msg);
             }
         };
@@ -128,7 +133,7 @@ public class PublishModel implements IPublishEpi {
             if (!file11.exists()){
                 file11.createNewFile();
             }
-            System.out.println("视频文件是否存在---"+file);
+
             System.out.println("封面图文件是否存在----"+file11.exists()+"----路径---"+file11.getAbsolutePath());
             System.out.println("封面图---"+frameAtTime);
             fileOutputStream1 = new FileOutputStream(file11);
@@ -169,10 +174,10 @@ public class PublishModel implements IPublishEpi {
             requestBody=null;
         }
         if (file!=null){
-            file=null;
+            file.delete();
         }
         if (file1!=null){
-            file1=null;
+            file1.delete();
         }
         if (file11!=null){
             if (file11.exists()){
@@ -182,18 +187,19 @@ public class PublishModel implements IPublishEpi {
         if (coverIv!=null){
             coverIv=null;
         }
-        if (fileOutputStream1!=null){
-            try {
-                fileOutputStream1.close();
-                media.release();
-                media=null;
-                if (frameAtTime!=null){
-                    frameAtTime=null;
+        if (media!=null){
+                try {
+                    fileOutputStream1.close();
+                    media.release();
+                    media=null;
+                    if (frameAtTime!=null){
+                        frameAtTime=null;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+
     }
 
 //    private void saveImg(Bitmap bitmap) {

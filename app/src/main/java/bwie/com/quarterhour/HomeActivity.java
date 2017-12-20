@@ -46,6 +46,7 @@ import butterknife.Unbinder;
 import bwie.com.basemodule.BaseActivity;
 import bwie.com.basemodule.BasePresent;
 import bwie.com.basemodule.SharedPreferencesUtil;
+import cn.jzvd.JZVideoPlayer;
 import entity.UserInfo;
 import fragment.EpisodeFragment;
 import fragment.HomeFragment;
@@ -110,6 +111,13 @@ public class HomeActivity extends BaseActivity {
     private AlertDialog show;
 
     @Override
+    public void onBackPressed() {
+        if (JZVideoPlayer.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+    @Override
     protected void onResume() {
         super.onResume();
         UserInfo userInfo = Hawk.get("UserInfo");
@@ -120,6 +128,9 @@ public class HomeActivity extends BaseActivity {
             }else {
                 tv_userName.setText(userInfo.nickname);
             }
+        }else {
+            iv_drawerlayout_icon.setImageResource(R.drawable.lefticon);
+            tv_userName.setText("尚未登陆");
         }
     }
 

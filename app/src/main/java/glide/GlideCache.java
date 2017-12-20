@@ -7,8 +7,10 @@ import android.content.Context;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.Registry;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory;
 import com.bumptech.glide.module.GlideModule;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -39,4 +41,26 @@ public class GlideCache implements GlideModule {
     public void registerComponents(Context context, Glide glide, Registry registry) {
 
     }
+
+    public static RequestOptions NoMemoryDiskCache(){
+        RequestOptions options=new RequestOptions();
+        options.skipMemoryCache(false);
+        options.diskCacheStrategy(DiskCacheStrategy.NONE);
+        return options;
+    }
+
+    public static RequestOptions DiskCache(){
+        RequestOptions options=new RequestOptions();
+        options.skipMemoryCache(false);
+        options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+        return options;
+    }
+
+    public static RequestOptions MemoryCache(){
+        RequestOptions options=new RequestOptions();
+        options.skipMemoryCache(true);
+        options.diskCacheStrategy(DiskCacheStrategy.NONE);
+        return options;
+    }
+
 }

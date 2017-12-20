@@ -33,7 +33,9 @@
             android:name="design_height"
             android:value="1920" />
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,7 +44,10 @@
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:launchMode="singleTask" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".PhoneLoginActivity" />
         <activity android:name=".ResActivity" />
@@ -69,7 +74,15 @@
         </provider>
 
         <activity android:name=".PublishEpisodeActivity" />
-        <activity android:name=".PersonalActivity"></activity>
+        <activity android:name=".PersonalActivity" />
+        <activity
+            android:name=".VideoDetailsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".UserDetailsActivity" android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

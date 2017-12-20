@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="300px">
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/lin_share_qq"
+            android:padding="20px"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/qq_hot"
+                android:layout_width="100px"
+                android:layout_height="100px" />
+            <TextView
+                android:text="QQ好友"
+                android:textSize="40px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <View
+            android:background="#000000"
+            android:layout_width="1px"
+            android:layout_height="100px"/>
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/lin_share_qqZone"
+
+            android:padding="20px"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/qq_zone"
+                android:layout_width="100px"
+                android:layout_height="100px" />
+            <TextView
+                android:text="QQ空间"
+                android:textSize="40px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+        <View
+            android:background="#000000"
+            android:layout_width="1px"
+            android:layout_height="100px"/>
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/lin_share_friend"
+            android:padding="20px"
+
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/friend_circler"
+                android:layout_width="100px"
+                android:layout_height="100px" />
+            <TextView
+                android:text="朋友圈"
+                android:textSize="40px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+        <View
+            android:background="#000000"
+            android:layout_width="1px"
+            android:layout_height="100px"/>
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/lin_share_weixin"
+            android:padding="20px"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/weixin_hot"
+                android:layout_width="100px"
+                android:layout_height="100px" />
+            <TextView
+                android:text="微信好友"
+                android:textSize="40px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+    </com.zhy.autolayout.AutoLinearLayout>
+
+    <Button
+        android:textSize="40px"
+        android:id="@+id/btn_cancel_share"
+        android:text="取消"
+        android:layout_marginTop="20px"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="120px" />
+</com.zhy.autolayout.AutoLinearLayout>

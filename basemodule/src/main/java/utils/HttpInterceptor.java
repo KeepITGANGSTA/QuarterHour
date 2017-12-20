@@ -96,7 +96,6 @@ public class HttpInterceptor implements Interceptor {
                 builder1.addFormDataPart("source","android")
                         .addFormDataPart("appVersion",1+"")
                         .addFormDataPart("token",token+"");
-
                 List<MultipartBody.Part>  parts = body.parts();
                 for (MultipartBody.Part part : parts) {
                     builder1.addPart(part);

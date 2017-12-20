@@ -97,7 +97,6 @@ public abstract class BaseActivity<P extends BasePresent> extends AppCompatActiv
         }
         setContentView(getLayoutID());
         steepStateBar(isSteepStateBar());
-
         basePresent=initBasePresent();
         initView(savedInstanceState);
         initData();

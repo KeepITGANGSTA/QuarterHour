@@ -28,7 +28,7 @@ public class RxHelper {
                 return tObservable.flatMap(new Func1<BaseEntity<T>, Observable<T>>() {
                     @Override
                     public Observable<T> call(BaseEntity<T> result) {
-                        System.out.println("--------------------------------------------段子-----------------"+result.msg);
+                        System.out.println("-----------------------------请求结果-----------------"+result.msg);
                         if ("0".equals(result.code)){
                             return createData(result.data);
                         } else{

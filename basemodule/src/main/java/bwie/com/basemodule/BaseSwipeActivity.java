@@ -17,16 +17,19 @@ import android.widget.Toast;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+import rx.subjects.PublishSubject;
+import utils.ActivityLifeCycleEvent;
 
 /**
  * Created by 李英杰 on 2017/11/14.
  * Description：
  */
 
-public abstract class BaseSwipeActivity extends SwipeBackActivity implements View.OnClickListener {
+public abstract class BaseSwipeActivity<P extends BasePresent> extends SwipeBackActivity implements View.OnClickListener {
 
-
-
+    public final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject=PublishSubject.create();
+    public P basePresent;
+    private boolean isNull=false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +38,33 @@ public abstract class BaseSwipeActivity extends SwipeBackActivity implements Vie
         SwipeBackLayout swipeBackLayout = getSwipeBackLayout();
         swipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
         swipeBackLayout.setEdgeSize(300);
-
         initView();
         initData();
     }
 
+    @Override
+    protected void onPause() {
+        lifecycleSubject.onNext(ActivityLifeCycleEvent.PAUSE);
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        lifecycleSubject.onNext(ActivityLifeCycleEvent.STOP);
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        lifecycleSubject.onNext(ActivityLifeCycleEvent.DESTROY);
+        super.onDestroy();
+        if (nullis()){
+            System.out.println("成功销毁");
+            basePresent.destory();
+        }
+    }
+
+    public abstract boolean nullis();
     @Override
     public void onClick(View view) {
         BaseOnClick(view);
