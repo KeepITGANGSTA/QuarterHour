@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="230px"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="30px"
+    android:paddingRight="30px">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/iv_msg_icon"
+        android:src="@mipmap/ic_launcher"
+        app:riv_oval="true"
+        android:layout_width="170px"
+        android:layout_height="170px" />
+
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="170px">
+
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/tv_msg_nickName"
+            android:layout_marginLeft="50px"
+            android:text="NickName"
+            android:textSize="40px"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/tv_msg_lastMsg"
+            android:layout_marginLeft="50px"
+            android:text="create_time"
+            android:textSize="36px"
+            android:textColor="#CDCDCD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="170px">
+
+        <TextView
+            android:textColor="#CDCDCD"
+            android:textSize="37px"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="2017-12-12 24:24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+
+
+</com.zhy.autolayout.AutoLinearLayout>

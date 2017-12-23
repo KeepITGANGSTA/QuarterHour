@@ -22,10 +22,6 @@ public class ApiException extends RuntimeException {
         super(detailMessage);
     }
 
-
-
-
-
     @Override
     public String getMessage() {
         return message;
@@ -55,5 +51,4 @@ public class ApiException extends RuntimeException {
         }
         return message;
     }
-
 }

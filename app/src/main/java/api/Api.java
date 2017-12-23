@@ -6,6 +6,8 @@ import java.util.List;
 import entity.AdBean;
 import entity.BaseEntity;
 import entity.EpiBean;
+import entity.EpiDetails;
+import entity.FollowBean;
 import entity.UserInfo;
 
 import entity.UserInfoBean;
@@ -55,9 +57,9 @@ public interface Api {
     @POST("quarter/publishVideo ")
     Observable<BaseEntity<Object>> publishVideo(@Part List<MultipartBody.Part> list);
 
-    @FormUrlEncoded
-    @POST("quarter/getVideos")
-    Observable<BaseEntity<List<VideoInfo>>> getVideos(@Field("uid") String uid,@Field("type") String type,@Field("page") String page);
+
+    @GET("quarter/getVideos")
+    Observable<BaseEntity<List<VideoInfo>>> getVideos(@Query("uid") String uid,@Query("type") String type,@Query("page") String page);
 
     @FormUrlEncoded
     @POST("quarter/getVideoDetail")
@@ -96,5 +98,14 @@ public interface Api {
     @FormUrlEncoded
     @POST("user/getUserInfo")
     Observable<BaseEntity<UserInfo>> UserInfo(@Field("uid") String uid);
+
+    @FormUrlEncoded
+    @POST("quarter/getJokeDetail")
+    Observable<BaseEntity<EpiDetails>> getEpiDetails(@Field("jid") String jid);
+
+
+    @FormUrlEncoded
+    @POST("quarter/getFollowUsers")
+    Observable<BaseEntity<List<FollowBean>>> getFollowUser(@Field("uid") String uid);
 
 }

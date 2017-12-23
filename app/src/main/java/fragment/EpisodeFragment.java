@@ -1,5 +1,6 @@
 package fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -185,6 +186,15 @@ public class EpisodeFragment extends Fragment {
                 divide = new EpiDivide(getContext(),EpiDivide.VETTICAL_LIST,0,17);
                 episode_recyclerView.addItemDecoration(divide);
                 episode_recyclerView.setAdapter(adaptr);
+                adaptr.setEpiItemClick(new EpiAdapter.EpiItemClick() {
+                    @Override
+                    public void onEpiItemClick(int jid,int flag) {
+//                        Intent intent=new Intent();
+//                        intent.putExtra("jid",jid);
+//                        intent.putExtra("flag",flag);
+//                        startActivity(intent);
+                    }
+                });
             }
             @Override
             public void _OnError(String msg) {

@@ -1,5 +1,7 @@
 package fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,6 +28,7 @@ import bwie.com.basemodule.RetrofitHelper;
 import bwie.com.basemodule.SharedPreferencesUtil;
 import bwie.com.quarterhour.App;
 import bwie.com.quarterhour.R;
+import bwie.com.quarterhour.VideoDetailsActivity;
 import entity.VideoInfo;
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -87,11 +90,15 @@ public class HotVideoFragment extends Fragment {
             public void _Next(List<VideoInfo> o) {
                 adapter = new RecyclerAdapter(getActivity().getApplicationContext(),o);
                 recyclerView.setAdapter(adapter);
-                System.out.println("请求成功----"+o.size());
+                adapter.setOnVideoItemClick(wid -> {
+                    Intent intent=new Intent(getContext(), VideoDetailsActivity.class);
+                    intent.putExtra("videoWid",wid);
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                });
             }
             @Override
             public void _OnError(String msg) {
-                Toast.makeText(getActivity(), "请求超时!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "请求超时!"+msg, Toast.LENGTH_SHORT).show();
             }
         };
         Observable video = apiService.getVideos(Uid,"1",startPage+"");

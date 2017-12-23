@@ -200,6 +200,7 @@ public class PhoneLoginActivity extends BaseActivity<LoginPresent> implements Lo
         System.out.println("登录成功---"+userInfo.nickname);
         SharedPreferencesUtil.putPreferences("uid",userInfo.uid+"");
         SharedPreferencesUtil.putPreferences("token",userInfo.token);
+        Hawk.delete("UserInfo");
         Hawk.put("UserInfo",userInfo);
         timer=new Timer();
         timerTask=new TimerTask() {

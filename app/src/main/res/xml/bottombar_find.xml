@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs xmlns:android="http://schemas.android.com/apk/res/android">
+    <tab
+        id="@+id/tab_msg"
+        title="消息"
+        icon="@drawable/bottombar_tab_msg"
+        inActiveColor="#8F8F8F"
+        activeColor="#03A9F4"
+        />
+    <tab
+        id="@+id/tab_link"
+        title="联系人"
+        icon="@drawable/bottombar_tab_link"
+        inActiveColor="#8F8F8F"
+        activeColor="#03A9F4"
+        />
+    <tab
+        id="@+id/tab_active"
+        title="动态"
+        icon="@drawable/bottombar_tab_active"
+        inActiveColor="#8F8F8F"
+        activeColor="#03A9F4"
+        />
+
+</tabs>

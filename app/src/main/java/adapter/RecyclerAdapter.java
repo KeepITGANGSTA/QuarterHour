@@ -72,7 +72,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Myhold
         System.out.println("视频标题---"+videoInfo.workDesc);
         holder.tv_title.setText(videoInfo.workDesc);
         //getRingDuring(videoInfo.videoUrl);
-
+        holder.itemView.setOnClickListener(v -> onVideoItemClick.onItemClick(videoInfo.wid));
     }
 
     public static String getRingDuring(String mUri){
@@ -110,6 +110,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Myhold
         return format1;
     }*/
 
+    public OnVideoItemClick onVideoItemClick;
+    public void setOnVideoItemClick(OnVideoItemClick onVideoItemClick){
+        this.onVideoItemClick=onVideoItemClick;
+    }
+    public interface OnVideoItemClick{
+        void onItemClick(int wid);
+    }
+
+
     @Override
     public int getItemCount() {
         return list.size();
@@ -128,7 +137,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Myhold
             tv_TotalTime=itemView.findViewById(R.id.tv_totalTime);
         }
     }
-
 
     public static int dip2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;

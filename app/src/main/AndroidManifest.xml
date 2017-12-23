@@ -80,9 +80,17 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".UserDetailsActivity" android:launchMode="singleTask"
+        <activity
+            android:name=".UserDetailsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"></activity>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity android:name=".EpiDetailsActivity" />
+        <activity
+            android:name=".FollowUsersActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".PictureDetailsActivity"></activity>
+        <service android:name="service.ImgIntentService"/>
     </application>
 
 </manifest>

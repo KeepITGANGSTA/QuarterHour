@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout
+    android:gravity="center"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:src="@drawable/not_net"
+        android:layout_width="match_parent"
+        android:layout_height="300px" />
+    <TextView
+        android:layout_marginTop="50px"
+        android:textSize="40px"
+        android:text="没有网络~"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_marginTop="50px"
+        android:id="@+id/btn_epiDetails"
+        android:textColor="#ffffff"
+        android:textSize="40px"
+        android:text="重试"
+        android:background="@drawable/btn_login"
+        android:layout_width="300px"
+        android:layout_height="wrap_content" />
+
+</com.zhy.autolayout.AutoLinearLayout>

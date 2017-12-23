@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.orhanobut.hawk.Hawk;
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.zhy.autolayout.AutoLinearLayout;
 
@@ -49,6 +50,7 @@ import bwie.com.basemodule.SharedPreferencesUtil;
 import cn.jzvd.JZVideoPlayer;
 import entity.UserInfo;
 import fragment.EpisodeFragment;
+import fragment.FindFragment;
 import fragment.HomeFragment;
 import fragment.VideoFragment;
 import toolbar.SimpleToolBar;
@@ -98,6 +100,7 @@ public class HomeActivity extends BaseActivity {
     private HomeFragment homeFragment;
     private EpisodeFragment episodeFragment;
     private VideoFragment videoFragment;
+    private FindFragment findFragment;
 
     private LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
     private LeftItemAdapter adapter;
@@ -105,7 +108,7 @@ public class HomeActivity extends BaseActivity {
     private Timer timer;
     private TimerTask timerTask;
     private FragmentTransaction fragmentTransaction;
-
+    private boolean isFlag=false;
 
     private AlertDialog.Builder adb;
     private AlertDialog show;
@@ -141,6 +144,7 @@ public class HomeActivity extends BaseActivity {
             homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("home_fragment");
             episodeFragment= (EpisodeFragment) getSupportFragmentManager().findFragmentByTag("episode_fragment");
             videoFragment= (VideoFragment) getSupportFragmentManager().findFragmentByTag("video_fragment");
+            findFragment= (FindFragment) getSupportFragmentManager().findFragmentByTag("find_fragment");
         }
         //bind = ButterKnife.bind(this);
         simpleToolBar=findViewById(R.id.mToolbar);
@@ -195,7 +199,23 @@ public class HomeActivity extends BaseActivity {
         left_recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new LeftItemAdapter(this,title,ivlist);
         left_recyclerView.setAdapter(adapter);
-        adapter.setOnItemClick(id -> Toast.makeText(HomeActivity.this, title.get(id), Toast.LENGTH_SHORT).show());
+        adapter.setOnItemClick(id -> {
+            switch (id){
+                case 0:
+                    Intent intent=new Intent(HomeActivity.this,FollowUsersActivity.class);
+                    startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this).toBundle());
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+            }
+        });
     }
 
     private void publishEpi() {
@@ -279,7 +299,6 @@ public class HomeActivity extends BaseActivity {
         int i = Color.parseColor("#03A9F4");
         System.out.println("simpleToolBar---"+simpleToolBar);
         simpleToolBar.setBackgroundColor(i);
-
         bottomBar.setOnTabSelectListener(tabId -> {
             switch (tabId){
                 case R.id.tab_recommend:
@@ -296,6 +315,9 @@ public class HomeActivity extends BaseActivity {
                         if (videoFragment!=null){
                             getSupportFragmentManager().beginTransaction().hide(videoFragment).commit();
                         }
+                        if (findFragment!=null){
+                            getSupportFragmentManager().beginTransaction().hide(findFragment).commit();
+                        }
                         getSupportFragmentManager().beginTransaction().show(homeFragment).commit();
                     }
                     break;
@@ -306,12 +328,18 @@ public class HomeActivity extends BaseActivity {
                         if (videoFragment!=null){
                             getSupportFragmentManager().beginTransaction().hide(videoFragment).commit();
                         }
+                        if (findFragment!=null){
+                            getSupportFragmentManager().beginTransaction().hide(findFragment).commit();
+                        }
                         episodeFragment=new EpisodeFragment();
                         getSupportFragmentManager().beginTransaction().add(R.id.main_frameLayout,episodeFragment,"episode_fragment").commit();
                     }else {
                         getSupportFragmentManager().beginTransaction().hide(homeFragment).commit();
                         if (videoFragment!=null){
                             getSupportFragmentManager().beginTransaction().hide(videoFragment).commit();
+                        }
+                        if (findFragment!=null){
+                            getSupportFragmentManager().beginTransaction().hide(findFragment).commit();
                         }
                         getSupportFragmentManager().beginTransaction().show(episodeFragment).commit();
                     }
@@ -320,9 +348,12 @@ public class HomeActivity extends BaseActivity {
                 case R.id.tab_video:
                     simpleToolBar.setTv_title("视频");
                     if (videoFragment==null){
-                        getSupportFragmentManager().beginTransaction().hide(homeFragment);
+                        getSupportFragmentManager().beginTransaction().hide(homeFragment).commit();
                         if (episodeFragment!=null){
                             getSupportFragmentManager().beginTransaction().hide(episodeFragment).commit();
+                        }
+                        if (findFragment!=null){
+                            getSupportFragmentManager().beginTransaction().hide(findFragment).commit();
                         }
                         videoFragment=new VideoFragment();
                         getSupportFragmentManager().beginTransaction().add(R.id.main_frameLayout,videoFragment,"video_fragment").commit();
@@ -331,9 +362,40 @@ public class HomeActivity extends BaseActivity {
                         if (episodeFragment!=null){
                             getSupportFragmentManager().beginTransaction().hide(episodeFragment).commit();
                         }
+                        if (findFragment!=null){
+                            getSupportFragmentManager().beginTransaction().hide(findFragment).commit();
+                        }
                         getSupportFragmentManager().beginTransaction().show(videoFragment).commit();
                     }
                    //getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout,videoFragment).commit();
+                    break;
+                case R.id.tab_find:
+                    if (isFlag){
+
+                    }else {
+
+                    }
+                    simpleToolBar.setTv_title("发现");
+                    if (findFragment==null){
+                        getSupportFragmentManager().beginTransaction().hide(homeFragment).commit();
+                        if (videoFragment!=null){
+                            getSupportFragmentManager().beginTransaction().hide(videoFragment).commit();
+                        }
+                        if (episodeFragment!=null){
+                            getSupportFragmentManager().beginTransaction().hide(episodeFragment).commit();
+                        }
+                        findFragment=new FindFragment();
+                        getSupportFragmentManager().beginTransaction().add(R.id.main_frameLayout,findFragment,"find_fragment").commit();
+                    }else {
+                        getSupportFragmentManager().beginTransaction().hide(homeFragment).commit();
+                        if (episodeFragment!=null){
+                            getSupportFragmentManager().beginTransaction().hide(episodeFragment).commit();
+                        }
+                        if (videoFragment!=null){
+                            getSupportFragmentManager().beginTransaction().hide(videoFragment).commit();
+                        }
+                        getSupportFragmentManager().beginTransaction().show(findFragment).commit();
+                    }
                     break;
             }
         });

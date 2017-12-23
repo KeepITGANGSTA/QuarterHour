@@ -21,4 +21,11 @@
         inActiveColor="#8F8F8F"
         activeColor="#03A9F4"
         />
+    <tab
+        id="@+id/tab_find"
+        title="发现"
+        icon="@drawable/bottombar_tab_find"
+        inActiveColor="#8F8F8F"
+        activeColor="#03A9F4"
+        />
 </tabs>

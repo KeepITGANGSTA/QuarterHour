@@ -1,7 +1,11 @@
 package adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -20,6 +25,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import java.util.List;
 
 import bwie.com.quarterhour.App;
+import bwie.com.quarterhour.PictureDetailsActivity;
 import bwie.com.quarterhour.R;
 import entity.EpiBean;
 
@@ -28,7 +34,7 @@ import entity.EpiBean;
  * Description：
  */
 
-public class EpiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class EpiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
 
     private Context context;
     private List<EpiBean> list;
@@ -109,12 +115,37 @@ public class EpiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ((EpiViewHolder) holder).tv_publishTime.setText(epiBean.createTime);
             ((EpiViewHolder) holder).tv_content.setText(epiBean.content);
         }else if (holder instanceof EpiItemViewHolderOne){
+            ((EpiItemViewHolderOne) holder).iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(App.AppContext, "一张图片", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(context,PictureDetailsActivity.class);
+                    intent.putExtra("imgurlOne", (String) epiBean.imgUrls);
+                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
+                }
+            });
             Glide.with(context).applyDefaultRequestOptions(options).load(epiBean.user.icon).into(((EpiItemViewHolderOne) holder).iv_icon);
             ((EpiItemViewHolderOne) holder).tv_authorName.setText(epiBean.user.nickname);
             ((EpiItemViewHolderOne) holder).tv_publishTime.setText(epiBean.createTime);
             ((EpiItemViewHolderOne) holder).tv_content.setText(epiBean.content);
             Glide.with(App.AppContext).applyDefaultRequestOptions(options).load(epiBean.imgUrls).into(((EpiItemViewHolderOne) holder).iv);
         }else if (holder instanceof EpiItemViewHolderTwo){
+            ((EpiItemViewHolderTwo) holder).iv_one.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(context,PictureDetailsActivity.class);
+                    intent.putExtra("imgurlTwo", (String) epiBean.imgUrls);
+                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
+                }
+            });
+            ((EpiItemViewHolderTwo) holder).iv_two.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(context,PictureDetailsActivity.class);
+                    intent.putExtra("imgurlTwo", (String) epiBean.imgUrls);
+                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
+                }
+            });
             Glide.with(context).applyDefaultRequestOptions(options).load(epiBean.user.icon).into(((EpiItemViewHolderTwo) holder).iv_icon);
             ((EpiItemViewHolderTwo) holder).tv_authorName.setText(epiBean.user.nickname);
             ((EpiItemViewHolderTwo) holder).tv_publishTime.setText(epiBean.createTime);
@@ -134,12 +165,41 @@ public class EpiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             String[] split = imgUrls.split("\\|");
             adapter = new EpiItemAdapter(context,split);
             ((EpiViewHolderMore) holder).recyclerView.setAdapter(adapter);
+            adapter.setOnEpiItemClick(new EpiItemAdapter.OnEpiItemClick() {
+                @Override
+                public void onEpiItemClick(String[] imgs) {
+                    Intent intent=new Intent(context, PictureDetailsActivity.class);
+                    intent.putExtra("imgUrlMore",imgs);
+                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
+                }
+            });
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int flag=0;
+                if (holder instanceof EpiViewHolder){
+                    flag=0;
+                }else if (holder instanceof EpiItemViewHolderOne){
+                    flag=1;
+                }else if (holder instanceof EpiItemViewHolderTwo){
+                    flag=2;
+                }else if (holder instanceof EpiViewHolderMore){
+                    flag=3;
+                }
+                epiItemClick.onEpiItemClick(epiBean.jid,flag);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    @Override
+    public void onClick(View v) {
     }
 
     static class EpiViewHolder extends RecyclerView.ViewHolder {
@@ -222,6 +282,13 @@ public class EpiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
 
+    public EpiItemClick epiItemClick;
+    public void setEpiItemClick(EpiItemClick epiItemClic){
+        this.epiItemClick=epiItemClic;
+    }
+    public interface EpiItemClick{
+        void onEpiItemClick(int jid,int flag);
+    };
 
 
 }

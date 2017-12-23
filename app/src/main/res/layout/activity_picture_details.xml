@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout
+    android:background="#000000"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="bwie.com.quarterhour.PictureDetailsActivity">
+
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <ImageView
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/iv_ivDetails_back"
+        android:layout_margin="30px"
+        android:src="@drawable/login_back"
+        android:layout_width="70px"
+        android:layout_height="70px" />
+    <ImageView
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/iv_ivDetails_load"
+        android:layout_margin="30px"
+        android:src="@drawable/iv_details_load"
+        android:layout_width="70px"
+        android:layout_height="70px" />
+
+</com.zhy.autolayout.AutoRelativeLayout>

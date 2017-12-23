@@ -1,6 +1,9 @@
 package adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import bwie.com.quarterhour.App;
+import bwie.com.quarterhour.PictureDetailsActivity;
 import bwie.com.quarterhour.R;
 
 /**
@@ -48,6 +52,12 @@ public class EpiItemAdapter extends RecyclerView.Adapter<EpiItemAdapter.EpiItemV
         options.skipMemoryCache(true);
         options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
         Glide.with(context).applyDefaultRequestOptions(options).load(iv[position]).into(holder.imageView);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onEpiItemClick.onEpiItemClick(iv);
+            }
+        });
     }
 
     @Override
@@ -63,7 +73,13 @@ public class EpiItemAdapter extends RecyclerView.Adapter<EpiItemAdapter.EpiItemV
         }
     }
 
-
+    public OnEpiItemClick onEpiItemClick;
+    public void setOnEpiItemClick(OnEpiItemClick onEpiItemClick){
+        this.onEpiItemClick=onEpiItemClick;
+    }
+    public interface OnEpiItemClick{
+        void onEpiItemClick(String[] imgs);
+    }
 
 
     public void destroy(){
